@@ -10,7 +10,7 @@ import { connection } from "./utilities/database";
 import middleware from "./utilities/middleware";
 
 const router = express();
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT;
 
 connection.then(() => {
     console.log("DB connection successful");
