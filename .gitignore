@@ -93,8 +93,12 @@ typings/
 # dotenv files
 .env
 
-# Build folder
+# Build folders
 dist/
+build/
 
 # Dev folder
 out/
+
+# Certificates
+certs/

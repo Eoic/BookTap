@@ -8,7 +8,8 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "ts-watch": "rimraf out/ && tsc-watch -p tsconfig.json",
     "ts-build": "rimraf dist/ && tsc --outDir dist/ --sourceMap false --incremental false",
-    "build": "yarn lint && yarn ts-build"
+    "build-server": "yarn lint && yarn ts-build",
+    "build-client": "yarn --cwd ./client build"
   },
   "dependencies": {
     "compression": "^1.7.4",
