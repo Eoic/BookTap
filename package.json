@@ -1,0 +1,40 @@
+{
+  "name": "book-tap",
+  "description": "E-book library",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "rimraf out/ tsc-watch -p tsconfig.json --onSuccess \"concurrently -p \"[{name}]\" -n \"LINT,SERVER\" -c \"bgBlue.bold,bgGreen.bold\" --kill-others \"yarn lint\" \"node out/server.js\"\"",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "ts-watch": "rimraf out/ && tsc -w",
+    "ts-build": "rimraf dist/ && tsc --outDir dist/ --sourceMap false --incremental false",
+    "build": "yarn lint && yarn ts-build"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "connect-redis": "^4.0.2",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "express-validator": "^6.2.0",
+    "redis": "^2.8.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.0",
+    "tsc-watch": "^3.0.1",
+    "typeorm": "^0.2.19",
+    "typescript": "^3.6.3"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.0.1",
+    "@types/connect-redis": "^0.0.11",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.1",
+    "@types/express-session": "^1.15.14",
+    "@types/redis": "^2.8.13",
+    "concurrently": "^4.1.2",
+    "node-sass": "^4.12.0",
+    "tslint": "^5.20.0"
+  }
+}
