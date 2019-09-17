@@ -9,7 +9,8 @@
     "ts-watch": "rimraf out/ && tsc-watch -p tsconfig.json",
     "ts-build": "rimraf dist/ && tsc --outDir dist/ --sourceMap false --incremental false",
     "build-server": "yarn ts-build",
-    "build-client": "yarn --cwd ./client install && yarn --cwd ./client build"
+    "build-client": "yarn --cwd ./client install && yarn --cwd ./client build",
+    "build": "yarn build-server && yarn build-client"
   },
   "dependencies": {
     "compression": "^1.7.4",
