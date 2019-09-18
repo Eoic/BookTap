@@ -1,5 +1,8 @@
 import { TlsOptions } from "tls";
 import { createConnection } from "typeorm";
+import { Book } from "../models/Book";
+import { Shelf } from "../models/Shelf";
+import { Topic } from "../models/Topic";
 import { User } from "../models/User";
 
 function getTlsOptions(): TlsOptions | boolean {
@@ -16,7 +19,7 @@ function getTlsOptions(): TlsOptions | boolean {
 
 export const connection = createConnection({
   database: process.env.DB_NAME,
-  entities: [User],
+  entities: [User, Shelf, Topic, Book],
   host: process.env.DB_HOST,
   password: process.env.DB_PASS,
   port: Number(process.env.DB_PORT),

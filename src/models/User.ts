@@ -1,5 +1,6 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { validationLimits } from "../validation/limits";
+import { Book } from "./Book";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -12,7 +13,7 @@ export class User extends BaseEntity {
   @Column({ length: validationLimits.PASSWORD.max })
   public password!: string;
 
-  @Column()
+  @Column({ length: validationLimits.EMAIL.max })
   public email!: string;
 
   @CreateDateColumn({ type: "timestamp" })
@@ -20,4 +21,7 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn({ type: "timestamp" })
   public updatedAt!: Date;
+
+  @OneToMany(() => Book, (book) => (book as any).user)
+  public books!: Book[];
 }
