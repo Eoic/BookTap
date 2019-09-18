@@ -6,7 +6,9 @@ import { SessionType } from "./types";
 const createStore = (sessionInstance: SessionType) => {
   if (process.env.NODE_ENV === "production") {
     const redisStore = connectRedis(sessionInstance);
-    const redisClient = redis.createClient();
+    const redisClient = redis.createClient({
+      url: process.env.REDIS_URL,
+    });
     return new redisStore({ client: redisClient });
   }
 
