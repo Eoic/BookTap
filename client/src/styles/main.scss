@@ -1,0 +1,243 @@
+@import "./partials/variables";
+@import "./partials/colors";
+@import "./partials/fonts";
+@import "./partials/reset";
+@import "./partials/mixins";
+
+// # Buttons
+// ## Base
+.btn {
+    padding: $btn-padding;
+    border-radius: $btn-border-radius;
+    border-color: $gray;
+    background-color: $white;
+    border-style: solid;
+    border-width: $btn-border-width;
+    transition: all $btn-transition-duration;
+}
+
+// ## Green
+.btn-green {
+    background-color: $green;
+    color: $gray;
+}
+
+.btn-green:hover {
+    background-color: $green-dark;
+}
+
+// ## Blue
+.btn-blue {
+    background-color: $blue-dark;
+    color: $gray;
+}
+
+.btn-blue:hover {
+    background-color: $blue;
+}
+
+// ## Red
+.btn-red {
+    background-color: $red-dark;
+    color: $gray;
+}
+
+.btn-red:hover {
+    background-color: $red;
+}
+
+// ## Purple
+.btn-purple {
+    background-color: $purple-dark;
+    color: $gray;
+}
+
+.btn-purple:hover {
+    background-color: $purple;
+    border-color: $purple;
+}
+
+// ## Button variations
+.btn-fluid {
+  width: 100%;
+}
+
+.btn-grey:hover {
+  background-color: #eeeeee;
+}
+
+a {
+  text-decoration: none;
+}
+
+// Navigation
+.navbar {
+  position: sticky;
+  width: 100%;
+  height: $navbar-height;
+  line-height: $navbar-height;
+  background-color: #2f2f2f;
+  box-shadow: 0 1px 4px 1px $black;
+  z-index: 1;
+}
+
+.navbar > ul {
+  list-style: none;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  // Positioning of navbar elements
+  margin: 0 auto;
+  max-width: map-get($map: $breakpoints, $key: lg);
+  padding: 0 20px;
+}
+
+.navbar > ul > li {
+  display: inline;
+  margin: 0 8px 0 8px;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 3rem;
+  float: left;
+  text-decoration: none;
+  color: white;
+  margin-right: 10px;
+
+  i {
+    font-size: 33px;
+  }
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.nav-link {
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    border-bottom: 3px solid $green;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  height: 65vh;
+  background-color: $green-dark;
+  min-height: 300px;
+
+  h1 {
+    font-size: 5em;
+    text-align: center;
+    color: $gray-dark;
+  }
+
+  p {
+    font-size: 2em;
+    text-align: center;
+    color: $gray-dark;
+  }
+}
+
+@include break-below(sm) {
+  .hero {
+    height: calc(100vh - #{$navbar-height});
+
+    h1 {
+      font-size: 4em;
+    }
+
+    p {
+      font-size: 1.5em;
+    }
+  }
+}
+
+// # Positioning
+.fl-left {
+  float: left;
+}
+
+.fl-right {
+  float: right;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.pl-20 {
+  padding-left: 20px;
+}
+
+.pl-0 {
+  padding-left: 0;
+}
+
+.text-left {
+  text-align: left;
+}
+
+// # Sidebar
+.sidebar {
+    top: $navbar-height;
+    left: 0;
+    bottom: 0;
+    width: $library-sidebar-width;
+    background-color: #ffffff;
+    height: 100%;
+    position: fixed;
+    padding: $library-sidebar-padding;
+    box-shadow: 1px 0px 3px 0px #826f6f;
+}
+
+.sibebar-hamburger {
+  float: right;
+}
+
+.sidebar-header {
+  font-size: 1.3rem;
+  float: left;
+  margin: 0;
+}
+
+// Library
+.lib-content {
+  margin-left: $library-sidebar-width + 2 * $library-sidebar-padding;
+}
+
+.subtitle {
+  color: #4e4e4e;
+} 
+
+// Misc
+hr.divider {
+  border-color: #858585;
+  border-style: solid;
+}
+
+.icon-fixed-width {
+  width: 25px;
+}
+
+ul.menu-list > li {
+  list-style: none;
+}
+
+ul.menu-list > li > button {
+  margin: 1px 0px;
+}
+
+@import "./partials/shame";

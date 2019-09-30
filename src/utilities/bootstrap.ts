@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { Route, Wrapper } from "./types";
 
 export const useMiddleware = (middlewareWrappers: Wrapper[], router: Router) => {
@@ -9,7 +9,8 @@ export const useMiddleware = (middlewareWrappers: Wrapper[], router: Router) => 
 
 export const useRoutes = (routes: Route[], router: Router) => {
   routes.forEach((route) => {
-    const { method, path, handler, validator } = route;
-    (router as any)[method](path, validator || [], handler);
+    const { method, path, handler, validator, upload } = route;
+    (router as any)[method](path, validator || [], upload || [], handler);
   });
+  router.use((req: Request, res: Response) => res.sendStatus(404));
 };

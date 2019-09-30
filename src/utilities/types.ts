@@ -1,6 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from "express";
 import { SessionOptions } from "express-session";
 import { ValidationChain } from "express-validator";
+import multer = require("multer");
 
 type Wrapper = (
   (router: Router) => void
@@ -17,6 +18,7 @@ type Route = {
   path: string,
   method: string,
   validator?: ValidationChain[],
+  upload?: multer.Instance,
   handler: Handler | Handler[],
 };
 

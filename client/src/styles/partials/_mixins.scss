@@ -1,0 +1,14 @@
+@mixin break-below($breakpoint) {
+  @if map-has-key($map: $breakpoints, $key: $breakpoint) {
+    $breakpoint-value: map-get(
+      $map: $breakpoints,
+      $key: $breakpoint
+    );
+
+    @media (max-width: $breakpoint-value) {
+      @content;
+    }
+  } @else {
+    @warn 'Breakpoint key not found: #{$breakpoint}.';
+  }
+}

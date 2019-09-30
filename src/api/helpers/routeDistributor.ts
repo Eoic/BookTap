@@ -1,7 +1,13 @@
-import { index } from "../index";
+import { books } from "../books";
+import { shelves } from "../shelves";
+import { topics } from "../topics";
+import { users } from "../users";
 
 const routes = [
-  ...index,
+  ...shelves,
+  ...books,
+  ...topics,
+  ...users,
 ];
 
 export { routes };

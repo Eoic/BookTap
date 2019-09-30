@@ -16,8 +16,14 @@ export class Book extends BaseEntity {
     @Column({ length: 255 })
     public title!: string;
 
+    @Column({ length: 255 })
+    public author!: string;
+
     @Column("int")
     public status!: BookStatus;
+
+    @Column()
+    public favourite!: boolean;
 
     @CreateDateColumn({ type: "timestamp" })
     public createdAt!: Date;

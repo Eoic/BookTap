@@ -2,6 +2,11 @@ import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGenerat
 import { validationLimits } from "../validation/limits";
 import { Book } from "./Book";
 
+enum UserType {
+  Client,
+  Admin,
+}
+
 @Entity("users")
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -15,6 +20,9 @@ export class User extends BaseEntity {
 
   @Column({ length: validationLimits.EMAIL.max })
   public email!: string;
+
+  @Column("int")
+  public userType!: UserType;
 
   @CreateDateColumn({ type: "timestamp" })
   public createdAt!: Date;
