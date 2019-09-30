@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { MainSection } from "./components/MainSection";
 import Navigation from "./components/Navigation";
-import { Footer } from "./components/Footer";
 import "./styles/main.scss";
 import Login from "./components/Login";
 import Register from "./components/Register";

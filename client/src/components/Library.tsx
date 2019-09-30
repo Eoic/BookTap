@@ -5,12 +5,6 @@ export interface ILibraryProps {
 }
 
 export default class Library extends React.Component<ILibraryProps> {
-  constructor(props: ILibraryProps) {
-    super(props);
-
-  }
-
-
   public render() {
     return (
       <>

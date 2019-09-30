@@ -56,29 +56,3 @@ export default class Navigation extends React.Component<INavigationProps> {
         );
     }
 }
-
-{/*
-            <nav>
-                <ul>
-                    <li>
-                        <Link to='/'>
-                            <i className='fas fa-book fa-2x nav-brand'>
-                                <p style={{ display: "inline", margin: 0 }}> Title </p>
-                            </i>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/"> About </Link>
-                    </li>
-                    <li>
-                        <Link to="/login" className="btn btn-green"> Login </Link>
-                    </li>
-                    <li>
-                        <Link to="/register" className="btn btn-blue"> Sign Up </Link>
-                    </li>
-                    <li>
-                        <Link to="/library" className="btn btn-purple"> Library </Link>
-                    </li>
-                </ul>
-            </nav>
-            */}
