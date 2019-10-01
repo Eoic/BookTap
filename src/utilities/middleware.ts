@@ -48,5 +48,5 @@ export default [
   handleCompression,
   handleSessionParser,
   handleStaticPath,
-  serveClientFiles,
+  // serveClientFiles,
 ];

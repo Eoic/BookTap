@@ -12,5 +12,5 @@ export const useRoutes = (routes: Route[], router: Router) => {
     const { method, path, handler, validator, upload } = route;
     (router as any)[method](path, validator || [], upload || [], handler);
   });
-  router.use((req: Request, res: Response) => res.sendStatus(404));
+  // router.use((req: Request, res: Response) => res.sendStatus(404));
 };
