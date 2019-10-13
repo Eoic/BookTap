@@ -5,7 +5,7 @@
     "start": "export NODE_ENV=production || set NODE_ENV=production&& node dist/server.js",
     "dev-server": "export NODE_ENV=development || set NODE_ENV=developent&& node out/server.js",
     "dev-client": "yarn --cwd ./client start",
-    "dev": "rimraf out/ && tsc-watch -p tsconfig.json --onSuccess \"concurrently -p \"[{name}]\" -n \"LINT,SERVER\" -c \"bgBlue.bold,bgGreen.bold\" --kill-others-on-fail \"npm:lint\" \"npm:dev-server\"\"",
+    "dev": "rimraf out/ && tsc-watch -p tsconfig.json --onSuccess \"concurrently -p \"[{name}]\" -n \"LINT,SERVER,CLIENT\" -c \"bgBlue.bold,bgGreen.bold,bgRed.bold\" --kill-others-on-fail \"npm:lint\" \"npm:dev-server\" npm:dev-client\"",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "ts-watch": "rimraf out/ && tsc-watch -p tsconfig.json",
     "ts-build": "rimraf dist/ && tsc --outDir dist/ --sourceMap false --incremental false",

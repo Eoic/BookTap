@@ -11,7 +11,7 @@ export default class Navigation extends React.Component<INavigationProps> {
                 <ul>
                     <li>
                         <Link to='/' className="navbar-brand">
-                            <i className="fas fa-book"> Title </i>
+                            <i className="fas fa-book"> BookTap </i>
                         </Link>
                     </li>
 
@@ -49,6 +49,11 @@ export default class Navigation extends React.Component<INavigationProps> {
                         <Link to='/#' className="nav-link">
                             About
                         </Link>
+                    </li>
+                    <li className="fl-right">
+                        <button className="menu-burger">
+                            <i className="fas fa-bars"></i>
+                        </button>
                     </li>
                 </ul>
                 <div className="clearfix"> </div>

@@ -88,8 +88,14 @@ a {
 
   // Positioning of navbar elements
   margin: 0 auto;
-  max-width: map-get($map: $breakpoints, $key: lg);
-  padding: 0 20px;
+  // max-width: map-get($map: $breakpoints, $key: lg);
+  padding: 0 55px;
+}
+
+@include break-below(sm) {
+  .navbar > ul {
+    padding: 0 20px;
+  }
 }
 
 .navbar > ul > li {
@@ -99,15 +105,15 @@ a {
 
 .navbar-brand {
   font-weight: bold;
-  font-family: monospace;
-  font-size: 3rem;
+  // font-family: monospace;
+  font-size: 1.5rem;
   float: left;
   text-decoration: none;
   color: white;
   margin-right: 10px;
 
   i {
-    font-size: 33px;
+    font-size: 24px;
   }
 }
 
@@ -126,38 +132,83 @@ a {
 
 .hero {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   flex-direction: column;
   position: relative;
   height: 65vh;
-  background-color: $green-dark;
+  background-color: $purple;
   min-height: 300px;
+  padding: 55px 50% 55px 55px;
 
   h1 {
-    font-size: 5em;
-    text-align: center;
-    color: $gray-dark;
+    font-size: 4em;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 19px;
   }
 
   p {
-    font-size: 2em;
-    text-align: center;
-    color: $gray-dark;
+    font-size: 1.5em;
+    color: #fff;
+    text-align: justify;
+  }
+
+  .hero-header-divider {
+    width: 300px;
+    background-color: #7876c6;
+    line-height: 9px;
   }
 }
 
 @include break-below(sm) {
+  // Main section
   .hero {
     height: calc(100vh - #{$navbar-height});
 
     h1 {
-      font-size: 4em;
+      font-size: 3em;
     }
 
     p {
-      font-size: 1.5em;
+      font-size: 1em;
     }
+  }
+}
+
+// mobile menu view
+.menu-burger {
+  display: none;
+  height: 3.3rem;
+  width: 3.3rem;
+  font-size: 1.5em;
+  margin: #{($navbar-height - 3.3rem) / 2};
+  color: #2f2f2f;
+  border-style: none;
+  border-radius: 2px;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.menu-burger:hover {
+  background-color: #c4c4c4;
+  color: $purple;
+}
+
+@include break-below(md) {
+  .navbar > ul > li:not(:first-child):not(:last-child) {
+    display: none;
+  }
+
+  .menu-burger {
+    display: inherit;
+  }
+}
+
+// Main section
+@include break-below(lg) {
+  .hero {
+    padding: 50px;
   }
 }
 
@@ -238,6 +289,60 @@ ul.menu-list > li {
 
 ul.menu-list > li > button {
   margin: 1px 0px;
+}
+
+// Features list
+.card {
+  background-color: rgb(255, 255, 255);
+  padding: 15px;
+  margin: 5px 0 5px 0;
+  transition: all 0.2s;
+}
+
+.card > h4 {
+  color: #2f2f2f;
+}
+
+.card > p {
+  @extend .subtitle;
+
+}
+
+.card:hover {
+  background-color: $purple;
+}
+
+.card:hover p {
+  color: $white;
+}
+
+.card:hover > h4 {
+  color: $white;
+}
+
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  background-color: #dbdbdb;
+  padding: 5px 50px 5px 50px;
+  column-gap: 10px;
+}
+
+@include break-below(sm) {
+  .features-list {
+    grid-template-columns: 100%;
+  }
+
+  .card {
+    border-radius: 0;
+  }
+}
+
+// Footer
+.footer {
+  background-color: #2f2f2f;
+  padding: 5px;
 }
 
 @import "./partials/shame";
