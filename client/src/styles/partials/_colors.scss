@@ -4,11 +4,11 @@
 $white: rgb(255, 255, 255);
 
 // Blue
-$blue: #2081c3;
-$blue-dark: #1c72ac;
+$blue: #5762D5;
+$blue-dark: #116094;
 
 // Green
-$green: #439A86;
+$green: #69A297;
 $green-dark: #27a791;
 
 // Purple
@@ -25,3 +25,7 @@ $black: #101028;
 // Red
 $red: #C95255;
 $red-dark: rgb(192, 58, 62);
+
+.text-purple {
+    color: $purple;
+}

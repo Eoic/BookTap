@@ -23,7 +23,17 @@
 }
 
 .btn-green:hover {
-    background-color: $green-dark;
+  background-color: $green-dark;
+}
+
+.btn-green-outline {
+  background-color: transparent;
+  border-color: $green;
+  border-width: 2px;
+}
+
+.btn-green-outline:hover {
+  background-color: $green;
 }
 
 // ## Blue
@@ -34,6 +44,16 @@
 
 .btn-blue:hover {
     background-color: $blue;
+}
+
+.btn-blue-outline {
+  background-color: transparent;
+  border-color: $blue;
+  border-width: 2px;
+}
+
+.btn-blue-outline:hover {
+  background-color: $blue;
 }
 
 // ## Red
@@ -81,6 +101,24 @@ a {
   z-index: 1;
 }
 
+.navbar-mobile {
+  height: inherit;
+  position: fixed;
+  overflow-y: auto;
+}
+
+.nav-mobile-link {
+  display: block !important;
+  color: #fff;
+  background-color: #2f2f2f;
+  padding: 0 5px;
+  margin: 0 !important;
+}
+
+.nav-mobile-link:hover {
+  background-color: #383838;
+}
+
 .navbar > ul {
   list-style: none;
   margin-left: 10px;
@@ -88,7 +126,6 @@ a {
 
   // Positioning of navbar elements
   margin: 0 auto;
-  // max-width: map-get($map: $breakpoints, $key: lg);
   padding: 0 55px;
 }
 
@@ -127,19 +164,23 @@ a {
 }
 
 .nav-link:hover {
-    border-bottom: 3px solid $green;
+    border-bottom: 3px solid $green-dark;
+}
+
+.hero-content {
+  padding-right: 50px;
 }
 
 .hero {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
   position: relative;
-  height: 65vh;
+  height: 68vh;
   background-color: $purple;
   min-height: 300px;
-  padding: 55px 50% 55px 55px;
+  padding: 55px 55px 55px 55px;
 
   h1 {
     font-size: 4em;
@@ -161,17 +202,31 @@ a {
   }
 }
 
+@include break-below(md) {
+  .hero {
+    height: calc(100vh - #{$navbar-height});
+  }
+}
+
 @include break-below(sm) {
   // Main section
   .hero {
-    height: calc(100vh - #{$navbar-height});
-
+    height: calc(85vh - #{$navbar-height});
+    
     h1 {
-      font-size: 3em;
+      font-size: 2em;
     }
 
     p {
       font-size: 1em;
+    }
+
+    img {
+      display: none;
+    }
+
+    .hero-content {
+      padding-right: 0;
     }
   }
 }
@@ -188,10 +243,10 @@ a {
   border-radius: 2px;
   transition: all 0.2s;
   padding: 0;
+  margin-right: -10px;
 }
 
 .menu-burger:hover {
-  background-color: #c4c4c4;
   color: $purple;
 }
 
@@ -203,12 +258,16 @@ a {
   .menu-burger {
     display: inherit;
   }
+
+  .navbar {
+
+  }
 }
 
 // Main section
 @include break-below(lg) {
   .hero {
-    padding: 50px;
+    padding: 20px;
   }
 }
 
@@ -239,6 +298,10 @@ a {
 
 .text-left {
   text-align: left;
+}
+
+.text-center {
+  text-align: center;
 }
 
 // # Sidebar
@@ -296,28 +359,23 @@ ul.menu-list > li > button {
   background-color: rgb(255, 255, 255);
   padding: 15px;
   margin: 5px 0 5px 0;
-  transition: all 0.2s;
+  transition: all 0.4s;
+  border: 2px solid rgb(255, 255, 255);
 }
 
 .card > h4 {
-  color: #2f2f2f;
+  color: $purple;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 1.5rem;
 }
 
 .card > p {
   @extend .subtitle;
-
 }
 
 .card:hover {
-  background-color: $purple;
-}
-
-.card:hover p {
-  color: $white;
-}
-
-.card:hover > h4 {
-  color: $white;
+  border-color: $purple;
 }
 
 .features-list {
@@ -325,13 +383,14 @@ ul.menu-list > li > button {
   grid-template-columns: repeat(3, 1fr);
   justify-content: center;
   background-color: #dbdbdb;
-  padding: 5px 50px 5px 50px;
+  padding: 5px 50px;
   column-gap: 10px;
 }
 
 @include break-below(sm) {
   .features-list {
     grid-template-columns: 100%;
+    padding: 5px 20px;
   }
 
   .card {
@@ -343,6 +402,90 @@ ul.menu-list > li > button {
 .footer {
   background-color: #2f2f2f;
   padding: 5px;
+}
+
+// Login
+.form-wrapper {
+  background-color: $purple;
+  height: calc(100vh - 64px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  box-sizing: border-box;
+  padding: 15px 15px 5px 15px;
+  border-radius: 3px;
+  background-color: #fff;
+  min-width: 370px;
+  text-align: center;
+  box-shadow: 0px 0px 12px 3px #1a1f49;
+}
+
+.login-form > h2 {
+  margin: 5px;
+  color: #2f2f2f;
+}
+
+.login-form > p {
+  margin-top: 5px;
+}
+
+.login-form-link {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.login-form-link:hover {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
+.input {
+  display: block;
+  padding: 10px;
+  font-size: 1.2rem;
+  width: 100%;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  font-weight: 500;
+  border: 1px solid #a5a5a5;
+  border-radius: 2px;
+}
+
+.btn-form {
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+@include break-below(xs) {
+  .login-form {
+    min-width: 100%;
+    height: 100%;
+    border-radius: 0px;
+    box-shadow: none;
+  }
+
+  .form-wrapper {
+    display: block;
+  }
+}
+
+.divider-with-text {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000; 
+  line-height: 0.1em;
+  margin: 10px 0 20px;
+}
+
+.divider-with-text span { 
+  background:#fff; 
+  padding: 0 10px; 
 }
 
 @import "./partials/shame";

@@ -12,3 +12,18 @@
     @warn 'Breakpoint key not found: #{$breakpoint}.';
   }
 }
+
+@mixin break-below-height($breakpoint) {
+  @if map-has-key($map: $breakpoints, $key: $breakpoint) {
+    $breakpoint-value: map-get(
+      $map: $breakpoints,
+      $key: $breakpoint
+    );
+
+    @media (max-height: $breakpoint-value) {
+      @content;
+    }
+  } @else {
+    @warn 'Breakpoint key not found: #{$breakpoint}.';
+  }
+}
