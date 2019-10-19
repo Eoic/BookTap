@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import passport = require("passport");
+// import passport = require("passport");
 import { METHOD_TYPE } from "./helpers/methodTypes";
 
 const auth = [{

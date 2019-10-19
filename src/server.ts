@@ -3,8 +3,7 @@ import path from "path";
 if (process.env.NODE_ENV === "development") {
     const dotConfig = dotenv.config();
 }
-import express, { NextFunction, Request, Response } from "express";
-import passport from "passport";
+import express from "express";
 import "reflect-metadata";
 import { routes } from "./api/helpers/routeDistributor";
 import { useMiddleware, useRoutes } from "./utilities/bootstrap";
@@ -17,8 +16,6 @@ const port = process.env.PORT;
 connection.then(() => {
     useMiddleware(middleware, router);
     useRoutes(routes, router);
-    router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
-    router.get("/auth/google/callback", )
     if (process.env.NODE_ENV === "production") {
         router.use(express.static("client/build"));
         router.get("*", (req, res) => {

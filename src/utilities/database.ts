@@ -6,7 +6,7 @@ import { Topic } from "../models/Topic";
 import { User } from "../models/User";
 
 function decodeBase64(value: string | undefined): string {
-  return new Buffer(String(value), "base64").toString("ascii");
+  return Buffer.from(String(value), "base64").toString("ascii");
 }
 
 function getTlsOptions(): TlsOptions | boolean {
