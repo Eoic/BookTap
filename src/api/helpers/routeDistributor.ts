@@ -1,3 +1,4 @@
+import { auth } from "../auth";
 import { books } from "../books";
 import { shelves } from "../shelves";
 import { topics } from "../topics";
@@ -8,6 +9,7 @@ const routes = [
   ...books,
   ...topics,
   ...users,
+  // ...auth,
 ];
 
 export { routes };

@@ -2,7 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGenerat
 import { validationLimits } from "../validation/limits";
 import { Book } from "./Book";
 
-enum UserType {
+export enum UserType {
   Client,
   Admin,
 }
@@ -12,14 +12,17 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column({ length: validationLimits.USERNAME.max })
+  @Column({ length: validationLimits.USERNAME.max, unique: true })
   public username!: string;
 
   @Column({ length: validationLimits.PASSWORD.max })
   public password!: string;
 
-  @Column({ length: validationLimits.EMAIL.max })
+  @Column({ length: validationLimits.EMAIL.max, unique: true })
   public email!: string;
+
+  @Column()
+  public googleId?: string;
 
   @Column("int")
   public userType!: UserType;

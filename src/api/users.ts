@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import { getConnection, getManager } from "typeorm";
+import { User, UserType } from "../models/User";
 import { METHOD_TYPE } from "./helpers/methodTypes";
 import { mockData } from "./helpers/mockData";
 
@@ -10,7 +12,15 @@ const users = [
         path: "/users",
         method: METHOD_TYPE.GET,
         handler: async (req: Request, res: Response) => {
-            res.status(200).json(mockData.users);
+            const entityManager = getManager();
+            await entityManager.delete(User, {
+                username: "hello",
+            });
+
+            const result = await entityManager.find(User, {
+                username: "hello",
+            });
+            res.status(200).json(result);
         },
     },
     /**

@@ -248,6 +248,7 @@ a {
 
 .menu-burger:hover {
   color: $purple;
+  background-color: $white;
 }
 
 @include break-below(md) {
@@ -407,7 +408,7 @@ ul.menu-list > li > button {
 // Login
 .form-wrapper {
   background-color: $purple;
-  height: calc(100vh - 64px);
+  height: calc(100% - 4rem);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -462,16 +463,16 @@ ul.menu-list > li > button {
   font-size: 1.2rem;
 }
 
-@include break-below(xs) {
+@include break-below(sm) {
   .login-form {
     min-width: 100%;
-    height: 100%;
     border-radius: 0px;
     box-shadow: none;
+    height: inherit;
   }
 
   .form-wrapper {
-    display: block;
+    height: inherit;
   }
 }
 

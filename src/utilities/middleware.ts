@@ -4,7 +4,11 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import { Router, static as staticPath } from "express";
+import passport, { Profile } from "passport";
+import PassportStrategy from "passport-google-oauth20";
 import path from "path";
+import { getManager } from "typeorm";
+import { User, UserType } from "../models/User";
 import { getSessionInstance } from "./middleware-instances";
 
 const handleCookieParser = (router: Router) => {
@@ -32,6 +36,18 @@ const handleStaticPath = (router: Router) => {
   router.use(staticPath(path.resolve(__dirname, "public")));
 };
 
+const handleAuthStrategy = (router: Router) => {
+  const entityManager = getManager();
+
+  passport.use(new PassportStrategy.Strategy({
+    clientID: String(process.env.GOOGLE_CLIENT_ID),
+    clientSecret: String(process.env.GOOGLE_CLIENT_SECRET),
+    callbackURL: `/auth/google/callback`,
+  }, async (accessToken: string, refreshToken: string, profile: Profile, callback: PassportStrategy.VerifyCallback) => {
+    // console.log("Callback...");
+  }));
+};
+
 const serveClientFiles = (router: Router) => {
   if (process.env.NODE_ENV === "production") {
     router.use(express.static("client/build"));
@@ -48,5 +64,6 @@ export default [
   handleCompression,
   handleSessionParser,
   handleStaticPath,
+  handleAuthStrategy,
   // serveClientFiles,
 ];
