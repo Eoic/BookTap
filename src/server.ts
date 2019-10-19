@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
 import path from "path";
+
 if (process.env.NODE_ENV === "development") {
+    console.info("Loading development config.");
     const dotConfig = dotenv.config();
 }
+
 import express from "express";
 import "reflect-metadata";
 import { routes } from "./api/helpers/routeDistributor";

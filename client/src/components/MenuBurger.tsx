@@ -6,10 +6,6 @@ export interface IMenuBurgerProps {
 }   
 
 export default class MenuBurger extends React.Component<IMenuBurgerProps> {
-    constructor(props: IMenuBurgerProps) {
-        super(props);
-    }
-
     public render() {
         return (
             <button className="menu-burger" onClick={this.props.handleClick}>
