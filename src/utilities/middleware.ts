@@ -32,6 +32,7 @@ const handleSessionParser = (router: Router) => {
   router.use(getSessionInstance());
 };
 
+/*
 const handleStaticPath = (router: Router) => {
   router.use(staticPath(path.resolve(__dirname, "public")));
 };
@@ -44,6 +45,7 @@ const serveClientFiles = (router: Router) => {
     });
   }
 };
+*/
 
 export default [
   handleCookieParser,
@@ -51,6 +53,6 @@ export default [
   handleCors,
   handleCompression,
   handleSessionParser,
-  handleStaticPath,
+  // handleStaticPath,
   // serveClientFiles,
 ];

@@ -20,6 +20,7 @@ connection.then(() => {
     useMiddleware(middleware, router);
     useRoutes(routes, router);
     if (process.env.NODE_ENV === "production") {
+        console.info("Serving production build files.");
         router.use(express.static("client/build"));
         router.get("*", (req, res) => {
             res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
@@ -28,5 +29,6 @@ connection.then(() => {
 }).then(() => {
     router.listen(port, () => console.log(`Server is running on port ${port}`));
 }).catch((err) => {
-    console.log(err);
+    console.error("Connection to database failed.");
+    console.error(err);
 });
