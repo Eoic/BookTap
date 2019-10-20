@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getConnection, getManager } from "typeorm";
+import { getManager } from "typeorm";
 import { User, UserType } from "../models/User";
 import { METHOD_TYPE } from "./helpers/methodTypes";
 import { mockData } from "./helpers/mockData";
@@ -12,15 +12,8 @@ const users = [
         path: "/users",
         method: METHOD_TYPE.GET,
         handler: async (req: Request, res: Response) => {
-            const entityManager = getManager();
-            await entityManager.delete(User, {
-                username: "hello",
-            });
-
-            const result = await entityManager.find(User, {
-                username: "hello",
-            });
-            res.status(200).json(result);
+            const userList = await getManager().find(User, { select: ["id", "username", "email", "createdAt", "updatedAt"] });
+            res.status(200).json(userList);
         },
     },
     /**
@@ -37,7 +30,7 @@ const users = [
                 return;
             }
 
-            const userObj = mockData.users[id];
+            const userObj = await getManager().findOne(User, id);
 
             if (typeof userObj === "undefined") {
                 res.sendStatus(404);
@@ -96,14 +89,13 @@ const users = [
                 return;
             }
 
-            const userObj = mockData.users[id];
-
-            if (typeof userObj === "undefined") {
-                res.sendStatus(404);
-                return;
-            }
-
-            res.sendStatus(204);
+            getManager().delete(User, { id }).then((result) => {
+                if (result.affected !== 0) {
+                    res.sendStatus(204);
+                } else {
+                    res.sendStatus(404);
+                }
+            });
         },
     },
 ];

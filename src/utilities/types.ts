@@ -1,4 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from "express";
+import expressJwt from "express-jwt";
 import { SessionOptions } from "express-session";
 import { ValidationChain } from "express-validator";
 import multer = require("multer");
@@ -18,6 +19,7 @@ type Route = {
   path: string,
   method: string,
   validator?: ValidationChain[],
+  auth?: Handler,
   upload?: multer.Instance,
   handler: Handler | Handler[],
 };

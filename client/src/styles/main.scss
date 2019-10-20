@@ -489,4 +489,17 @@ ul.menu-list > li > button {
   padding: 0 10px; 
 }
 
+// Errors
+.error-box {
+  padding: 5px;
+  border-radius: 3px;
+  background-color: rgb(235, 113, 113);
+  margin-bottom: 18px;
+}
+
+.error-list {
+  max-width: fit-content;
+  text-align: left;
+}
+
 @import "./partials/shame";

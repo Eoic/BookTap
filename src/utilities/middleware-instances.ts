@@ -1,3 +1,4 @@
+/*
 import connectRedis from "connect-redis";
 import expressSession, { MemoryStore } from "express-session";
 import redis from "redis";
@@ -30,3 +31,12 @@ const session = expressSession({
 
 const getSessionInstance = () => session;
 export { getSessionInstance };
+*/
+
+import expressJwt from "express-jwt";
+
+const expressJwtInstance = expressJwt({
+  secret: String(process.env.JWT_SECRET),
+});
+
+export const getTokenParser = () => expressJwtInstance;

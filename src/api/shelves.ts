@@ -1,60 +1,107 @@
 import { Request, Response } from "express";
+import { check, validationResult } from "express-validator";
+import { getManager } from "typeorm";
+import { Book } from "../models/Book";
+import { Shelf } from "../models/Shelf";
+import { Topic } from "../models/Topic";
+import { User } from "../models/User";
+import { shelfLimits } from "../validation/limits";
+import { validationResultParser } from "../validation/validationResultParser";
 import { METHOD_TYPE } from "./helpers/methodTypes";
 import { mockData } from "./helpers/mockData";
+import { verifyToken } from "./helpers/routeGuard";
 
 const shelves = [
   /**
-   * Get all shelves [LIST]
+   * Get all shelves [LIST][DONE]
    */
   {
     path: "/shelves",
     method: METHOD_TYPE.GET,
+    auth: verifyToken,
     handler: async (req: Request, res: Response) => {
-      res.status(200).json(mockData.shelves);
+      const entityManager = getManager();
+      entityManager.findOne(User, (req.user as any).id).then((result) => {
+        entityManager.find(Shelf, {
+          where: { user: result },
+        }).then((shelvesList) => {
+          res.status(200).json({ shelves: shelvesList });
+        });
+      });
     },
   },
   /**
    * Get shelf by id (with books) [CRUD(get)]
    */
   {
-    path: "/shelves/:id",
+    path: "/shelves/:shelfId",
     method: METHOD_TYPE.GET,
+    auth: verifyToken,
     handler: async (req: Request, res: Response) => {
-      const id: number = Number(req.params.id);
+      const shelfId: number = Number(req.params.shelfId);
 
-      if (isNaN(id)) {
+      if (isNaN(shelfId)) {
         res.sendStatus(400);
         return;
       }
 
-      const books = mockData.books.filter((book) => book.shelf === id);
-      const shelf = mockData.shelves.filter((shelfObj) => shelfObj.id === id);
-      const data = { shelf, books };
+      const user = await getManager().findOne(User, (req.user as any).id);
+      const books = await getManager().find(Book, {
+        where: { shelfId, user },
+        relations: ["books"],
+      });
 
-      if (data.shelf.length === 0) {
-        res.sendStatus(404);
-        return;
-      }
-
-      res.status(200).json(data);
+      res.status(200).json({ books });
     },
   },
   /**
-   * Create new shelf [CRUD(create)]
+   * Create new shelf [CRUD(create)][DONE]
    */
   {
     path: "/shelves",
     method: METHOD_TYPE.POST,
+    auth: verifyToken,
+    validator: [
+      check("title").not().isEmpty().withMessage("Shelf title should not be empty.")
+        .isAlphanumeric().withMessage("Title should consist of alphanumeric characters only.")
+        .isLength({ max: shelfLimits.title.max })
+        .withMessage(`Title is too long. Max length is: ${shelfLimits.title.max}`),
+    ],
     handler: async (req: Request, res: Response) => {
-      console.log(req.body);
-      const { title, description } = req.body;
+      // Check for validation errors
+      const results = validationResult(req);
 
-      if (typeof title === "undefined" || typeof description === "undefined") {
-        res.sendStatus(400);
+      if (!results.isEmpty()) {
+        const errors = validationResultParser(results);
+        res.status(400).json({ errors });
         return;
       }
 
-      res.sendStatus(204);
+      // Check if title is unique
+      const { title, description } = req.body;
+      const shelf = await getManager().findOne(Shelf, { title });
+
+      if (shelf) {
+        res.status(409).json({ errors: ["Shelf with this name already exists"] });
+        return;
+      }
+
+      // Create shelf instance
+      const user = await getManager().findOne(User, (req.user as any).id);
+      const newShelf = getManager().create(Shelf, { title, user });
+
+      if (typeof description !== "undefined") {
+        newShelf.description = description;
+      }
+
+      newShelf.save().then((result) => {
+        delete result.user;
+        res.status(201).json({
+          message: "Shelf was created successfully",
+          content: result,
+        });
+        return;
+      });
     },
   },
   /**
@@ -64,7 +111,29 @@ const shelves = [
     path: "/shelves/:shelfId/topic/:topicId",
     method: METHOD_TYPE.PATCH,
     handler: async (req: Request, res: Response) => {
-      res.sendStatus(204);
+      const entityManager = getManager();
+      const shelfId = Number(req.params.shelfId);
+      const topicId = Number(req.params.topicId);
+
+      const shelf = await entityManager.findOne(Shelf, { id: shelfId });
+
+      if (!shelf) {
+        res.status(404).json({ errors: ["Shelf not found"] });
+        return;
+      }
+
+      const topic = await entityManager.findOne(Topic, { id: topicId });
+
+      if (!topic) {
+        res.status(404).json({ errors: ["Topic not found"] });
+        return;
+      }
+
+      shelf.topic = topic;
+      shelf.save().then(() => {
+        res.sendStatus(204);
+        return;
+      });
     },
   },
   /**
@@ -95,21 +164,22 @@ const shelves = [
     },
   },
   /**
-   * Delete shelf [CRUD(remove)]
+   * Delete shelf [CRUD(remove)][DONE]
    */
   {
     path: "/shelves/:id",
     method: METHOD_TYPE.DELETE,
+    auth: verifyToken,
     handler: async (req: Request, res: Response) => {
-      const shelfId: number = Number(req.params.id);
-      const shelf = mockData.shelves.filter((shelfObj) => shelfObj.id === shelfId)[0];
+      const id: number = Number(req.params.id);
 
-      if (shelf) {
+      getManager().delete(Shelf, { id }).then((result) => {
+        if (result.affected === 0) {
+          res.sendStatus(404);
+          return;
+        }
         res.sendStatus(204);
-        return;
-      }
-
-      res.sendStatus(404);
+      });
     },
   },
 ];

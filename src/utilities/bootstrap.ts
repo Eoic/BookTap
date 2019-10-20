@@ -9,7 +9,7 @@ export const useMiddleware = (middlewareWrappers: Wrapper[], router: Router) => 
 
 export const useRoutes = (routes: Route[], router: Router) => {
   routes.forEach((route) => {
-    const { method, path, handler, validator, upload } = route;
-    (router as any)[method](path, validator || [], upload || [], handler);
+    const { method, path, handler, validator, auth, upload } = route;
+    (router as any)[method](path, validator || [], auth || [], upload || [], handler);
   });
 };

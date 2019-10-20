@@ -1,20 +1,25 @@
 import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { Handler } from "../../utilities/types";
 
-const routeVerifier = {
-  allowAuthorizedOnly: async (req: Request, res: Response, next: NextFunction) => {
-    return (routeVerifier.isAuthorized(req, res)) ? next() : res.redirect("/");
-  },
-  allowUnauthorizedOnly: async (req: Request, res: Response, next: NextFunction) => {
-    return (routeVerifier.isAuthorized(req, res)) ? res.redirect("/") : next();
-  },
-  isAuthorized: (req: Request, res: Response) => {
-    if (req.session) {
-      if (req.session.userId) {
-        return true;
+export const verifyToken: Handler = (req: Request, res: Response, next: NextFunction) => {
+  const bearerHeader = req.headers.authorization;
+
+  if (bearerHeader !== undefined) {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+
+    jwt.verify(bearerToken, String(process.env.JWT_SECRET), (err, data) => {
+      if (err) {
+        res.status(403).json({ message: "Provided token is invalid." });
+        return;
       }
-    }
-    return false;
-  },
-};
 
-export { routeVerifier };
+      (req as any).user = data;
+      next();
+    });
+  } else {
+    res.status(403).json({ message: "Authorization token not provided." });
+    return;
+  }
+};

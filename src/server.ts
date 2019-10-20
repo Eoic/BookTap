@@ -17,10 +17,13 @@ const router = express();
 const port = process.env.PORT;
 
 connection.then(() => {
+    router.use((req, res, next) => {
+        res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
+        next();
+    });
     useMiddleware(middleware, router);
     useRoutes(routes, router);
     if (process.env.NODE_ENV === "production") {
-        console.info("Serving production build files.");
         router.use(express.static("client/build"));
         router.get("*", (req, res) => {
             res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));

@@ -102,3 +102,6 @@ out/
 
 # Certificates
 # certs/
+
+# Uploads
+uploads/**/
