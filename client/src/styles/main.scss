@@ -220,6 +220,14 @@ a {
 @include break-below(md) {
   .hero {
     height: calc(100vh - #{$navbar-height});
+
+    img {
+      display: none;
+    }
+
+    .hero-content {
+      padding-right: 0;
+    }
   }
 }
 
@@ -236,14 +244,6 @@ a {
 
     p {
       font-size: 1em;
-    }
-
-    img {
-      display: none;
-    }
-
-    .hero-content {
-      padding-right: 0;
     }
   }
 }
