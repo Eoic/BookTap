@@ -54,6 +54,7 @@ const register = [{
 
     // If any validation errors ocurred.
     if (!errors.isEmpty()) {
+      console.log(errors);
       res.status(400).json({ errors: validationResultParser(errors) });
       return;
     }

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import AuthUtils from '../utilities/AuthUtils';
 import ErrorList from './ErrorList';
 
-export interface IRegisterProps {
-}
+export interface IRegisterProps extends RouteComponentProps { }
 
 export interface IRegisterFieldsState {
   email: string,
@@ -43,10 +42,10 @@ export default class Register extends React.Component<IRegisterProps, IRegisterS
     event.preventDefault();
     const { username, email, password, passwordRepeat } = this.state;
 
-    AuthUtils.register(username, email, password, passwordRepeat).then((response) => {
-      // Move to next page .. 
+    AuthUtils.register(username, email, password, passwordRepeat).then((_response) => {
+      this.props.history.push('/');
     }).catch((err) => {
-      this.setState({ errors: err.response.data });
+      this.setState({ errors: err.response.data.errors });
     });
   }
 

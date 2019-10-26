@@ -7,18 +7,12 @@ interface IFetchOptions {
 }
 
 export default class AuthUtils {
-    static login = (username: string, password: string) => {
-        return AuthUtils.fetch('/login', {
-            method: "POST",
-            body: JSON.stringify({
-                username, 
-                password
-            })
-        }).then((response) => {
-            if (typeof response.token !== "undefined")
-                AuthUtils.setToken(response.token);
+    private static tokenKey: string = "auth-token";
 
-            return Promise.resolve(response);
+    static login = (username: string, password: string) => {
+        return axios.post('/login', {
+            username,
+            password
         });
     }
 
@@ -42,6 +36,7 @@ export default class AuthUtils {
             return ((decodedToken as any).exp < Date.now() / 1000);
         } catch (err) {
             console.error("Token expired.");
+            localStorage.removeItem(AuthUtils.tokenKey);
             return false;
         }
     }
@@ -58,15 +53,15 @@ export default class AuthUtils {
     }
 
     static setToken = (token: string) => {
-        localStorage.setItem("auth-token", token);
+        localStorage.setItem(AuthUtils.tokenKey, token);
     }
 
     static getToken = () : string | null => {
-        return localStorage.getItem("auth-token");
+        return localStorage.getItem(AuthUtils.tokenKey);
     }
 
     static logout = () => {
-        localStorage.removeItem("auth-token");
+        localStorage.removeItem(AuthUtils.tokenKey);
     }
 
     static fetch = (route: string, options: IFetchOptions) => {

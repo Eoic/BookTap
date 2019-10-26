@@ -66,6 +66,16 @@
     background-color: $red;
 }
 
+.btn-red-outline {
+  background-color: transparent;
+  border-color: $red;
+  border-width: 2px;
+}
+
+.btn-red-outline:hover {
+  background-color: $red;
+}
+
 // ## Purple
 .btn-purple {
     background-color: $purple-dark;
@@ -500,8 +510,9 @@ ul.menu-list > li > button {
 .error-box {
   padding: 5px;
   border-radius: 3px;
-  background-color: rgb(235, 113, 113);
+  background-color: rgb(204, 72, 72);
   margin-bottom: 18px;
+  color: #ffffff;
 }
 
 .error-list {

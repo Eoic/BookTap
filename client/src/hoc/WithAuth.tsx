@@ -31,7 +31,7 @@ export default function WithAuth(ProtectedComponent: any) {
                     return (
                         <ProtectedComponent 
                             history={(this.props as any).history}
-                            decoded={this.state.decoded}/>
+                            decoded={this.state.decoded} />
                     )
                 } else {
                     return null;
