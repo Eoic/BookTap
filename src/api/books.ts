@@ -1,8 +1,10 @@
 import crypto from "crypto";
+import exiftoolBin from "dist-exiftool";
 import epubParser from "epub-metadata-parser";
 import { Request, Response } from "express";
 import fs from "fs";
 import multer from "multer";
+import exiftool from "node-exiftool";
 import path from "path";
 import { getManager } from "typeorm";
 import { Book, BookStatus } from "../models/Book";
@@ -41,6 +43,7 @@ const storage = multer.diskStorage({
 const upload: multer.Instance = multer({ storage });
 
 const books = [
+
   /**
    * Get all books [LIST][DONE]
    */
@@ -54,6 +57,7 @@ const books = [
       res.status(200).json(bookList);
     },
   },
+
   /**
    * Get book by id [CRUD(get)][DONE]
    */
@@ -79,6 +83,7 @@ const books = [
       res.status(200).json(book);
     },
   },
+
   /**
    * Download book by id[][DONE]
    */
@@ -98,9 +103,9 @@ const books = [
 
       // Check if file exists in the file system
       if (book) {
-        const filePath = path.join(__dirname, "../../", "uploads",
-                                   `${user.id}-${user.username}`,
-                                   `${book.fsReference}`);
+        const folder = `${user.id}-${user.username}`;
+        const filePath = path.join(__dirname, "../../", "uploads", folder, `${book.fsReference}`);
+
         fs.readFile(filePath, (err) => {
           if (err) {
             res.sendStatus(404);
@@ -115,6 +120,8 @@ const books = [
             }
           });
         });
+      } else {
+        res.sendStatus(404);
       }
     },
   },
@@ -132,13 +139,13 @@ const books = [
         return;
       }
 
+      const entityManager = getManager();
+      const user = await entityManager.findOne(User, { id: (req.user as any).id });
       const file: Express.Multer.File = (req.files as any)[0];
       const extension = path.extname(file.originalname);
 
       if (extension === ".epub") {
         epubParser.parse(`${file.destination}/${file.filename}`, `${file.destination}/temp`, async (book: any) => {
-          const entityManager = getManager();
-          const user = await entityManager.findOne(User, { id: (req.user as any).id });
           const bookInstance = getManager().create(Book, {
             title: book.title._,
             author: book.author,
@@ -153,18 +160,53 @@ const books = [
           });
 
           bookInstance.save().then((result) => {
-            delete result.user;
             res.status(201).json({
               message: "Book was uploaded successfully.",
-              content: result,
             });
-          }).catch((error) => {
+          }).catch(() => {
             res.sendStatus(400);
           });
         });
+      } else if (extension === ".pdf") {
+        const ep = new exiftool.ExiftoolProcess(exiftoolBin);
+
+        ep
+          .open()
+          .then(() => ep.readMetadata(`${file.destination}/${file.filename}`, ["-File:all"]))
+          .then((result: any, error: any) => {
+            if (error) {
+              res.sendStatus(400);
+              return;
+            }
+
+            const bookInstance = getManager().create(Book, {
+              title: result.data[0].Title,
+              author: result.data[0].Author,
+              status: BookStatus.NotStarted,
+              description: "",
+              favourite: false,
+              user,
+              fsReference: file.filename,
+              publisher: "",
+              language: "EN",
+              year: String(result.data[0].CreateDate).substr(0, 4),
+            });
+
+            bookInstance.save().then(() => {
+              res.status(201).json({
+                message: "Book was uploaded successfully.",
+              });
+            }).catch(() => {
+              res.sendStatus(400);
+            });
+          })
+          .then(() => ep.close())
+          .then(() => console.log("Closed exiftool"))
+          .catch(console.error);
       }
     },
   },
+
   /**
    * Delete book by id [CRUD(delete)][DONE]
    */
@@ -191,6 +233,121 @@ const books = [
       });
     },
   },
+
+  /**
+   * Edit book metadata [CRUD(modify)][DONE]
+   */
+  {
+    path: "/books/:id",
+    method: METHOD_TYPE.PATCH,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const entityManager = getManager();
+      const bookId = Number(req.params.id);
+      const userId = (req.user as any).id;
+      const user = await entityManager.findOne(User, userId);
+      const book = await entityManager.findOne(Book, { where: { user, id: bookId } });
+      const { title, description, author, publisher, language, year } = req.body;
+
+      if (book) {
+        if (title) {
+          book.title = title.trim();
+        }
+
+        book.description = description;
+        book.author = author;
+        book.publisher = publisher;
+        book.language = language;
+        book.year = year;
+
+        book.save().then(() => {
+          res.sendStatus(204);
+          return;
+        }).catch(() => {
+          res.sendStatus(400);
+        });
+      } else {
+        res.sendStatus(404);
+      }
+    },
+  },
+
+  /*
+   * Set book status
+   */
+  {
+    path: "/books/:id/status",
+    method: METHOD_TYPE.PATCH,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const entityManager = getManager();
+      const bookId = Number(req.params.id);
+      const user = await entityManager.findOne(User, (req.user as any).id);
+      const book = await entityManager.findOne(Book, { where: { user, id: bookId } });
+      const { status } = req.body;
+
+      if (book) {
+        if (status) {
+          if (typeof BookStatus[status] !== "undefined") {
+            const enumKey: string = BookStatus[status];
+            book.status = BookStatus[enumKey as any] as any;
+
+            book.save().then(() => {
+              res.sendStatus(200);
+              return;
+            }).catch(() => {
+              res.sendStatus(400);
+              return;
+            });
+          } else {
+            res.sendStatus(400);
+            return;
+          }
+        }
+      } else {
+        res.sendStatus(404);
+      }
+    },
+  },
+
+  /**
+   * Toggle book as favourite
+   */
+  {
+    path: "/books/:id/favourite",
+    method: METHOD_TYPE.PATCH,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const entityManager = getManager();
+      const bookId = Number(req.params.id);
+      const user = await entityManager.findOne(User, (req.user as any).id);
+      const book = await entityManager.findOne(Book, { where: { user, id: bookId } });
+
+      if (book) {
+        const favourite = Number(req.body.favourite);
+
+        if (!isNaN(favourite)) {
+          if (favourite === 0) {
+            book.favourite = false;
+          } else if (favourite === 1) {
+            book.favourite = true;
+          } else {
+            res.sendStatus(400);
+            return;
+          }
+
+          book.save().then(() => {
+            res.sendStatus(204);
+            return;
+          });
+        }
+      } else {
+        res.sendStatus(404);
+        return;
+      }
+    },
+  },
+
   /**
    * Add book to shelf [CRUD(modify)][DONE]
    */
@@ -200,10 +357,9 @@ const books = [
     auth: verifyToken,
     handler: async (req: Request, res: Response) => {
       const entityManager = getManager();
-      const bookId = Number(req.query.params.bookId);
-      const shelfId = Number(req.query.params.shelfId);
+      const bookId = Number(req.params.bookId);
+      const shelfId = Number(req.params.shelfId);
       const userId = (req.user as any).id;
-
       const user = await entityManager.findOne(User, userId);
       const book = await entityManager.findOne(Book, { where: { user, id: bookId } });
 
@@ -212,7 +368,11 @@ const books = [
 
         if (shelf) {
           book.shelf = shelf;
-          res.sendStatus(204);
+          book.save().then(() => {
+            res.sendStatus(204);
+          }).catch(() => {
+            res.sendStatus(400);
+          });
           return;
         } else {
           res.status(404).json({ errors: ["Shelf not found"] });

@@ -26,6 +26,9 @@ export class User extends BaseEntity {
   @Column("int")
   public userType!: UserType;
 
+  @Column("boolean", { default: true })
+  public confirmed!: boolean;
+
   @CreateDateColumn({ type: "timestamp" })
   public createdAt!: Date;
 

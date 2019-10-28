@@ -47,9 +47,9 @@ export class Book extends BaseEntity {
     public createdAt!: Date;
 
     // Relations
-    @ManyToOne(() => User, (user) => (user as any).books)
+    @ManyToOne(() => User, (user) => (user as any).books, { onDelete: "CASCADE" })
     public user!: User;
 
-    @ManyToOne(() => Shelf, (shelf) => (shelf as any).books)
+    @ManyToOne(() => Shelf, (shelf) => (shelf as any).books, { onDelete: "SET NULL" })
     public shelf!: Shelf;
 }

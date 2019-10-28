@@ -26,6 +26,6 @@ export class Topic extends BaseEntity {
     @OneToMany(() => Shelf, (shelf) => (shelf as any).topic)
     public shelves!: Shelf[];
 
-    @ManyToOne(() => User, (user) => (user as any).topics)
+    @ManyToOne(() => User, (user) => (user as any).topics, { onDelete: "CASCADE" })
     public user!: User;
 }

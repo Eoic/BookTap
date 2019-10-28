@@ -25,10 +25,10 @@ export class Shelf extends BaseEntity {
     public updatedAt!: Date;
 
     // Relations
-    @ManyToOne(() => Topic, (topic) => (topic as any).shelves)
+    @ManyToOne(() => Topic, (topic) => (topic as any).shelves, { onDelete: "SET NULL" })
     public topic!: Topic;
 
-    @ManyToOne(() => User, (user) => (user as any).shelves)
+    @ManyToOne(() => User, (user) => (user as any).shelves, { onDelete: "CASCADE" })
     public user!: User;
 
     @OneToMany(() => Book, (book) => (book as any).shelf)

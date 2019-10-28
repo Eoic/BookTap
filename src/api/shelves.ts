@@ -30,15 +30,16 @@ const shelves = [
       });
     },
   },
+
   /**
    * Get shelf by id (with books) [CRUD(get)]
    */
   {
-    path: "/shelves/:shelfId",
+    path: "/shelves/:id",
     method: METHOD_TYPE.GET,
     auth: verifyToken,
     handler: async (req: Request, res: Response) => {
-      const shelfId: number = Number(req.params.shelfId);
+      const shelfId: number = Number(req.params.id);
 
       if (isNaN(shelfId)) {
         res.sendStatus(400);
@@ -46,14 +47,19 @@ const shelves = [
       }
 
       const user = await getManager().findOne(User, (req.user as any).id);
-      const books = await getManager().find(Book, {
-        where: { shelfId, user },
+      const shelfBooks = await getManager().findOne(Shelf, {
+        where: { id: shelfId, user },
         relations: ["books"],
       });
 
-      res.status(200).json({ books });
+      if (shelfBooks) {
+        res.status(200).json({ shelf: shelfBooks });
+      } else {
+        res.sendStatus(404);
+      }
     },
   },
+
   /**
    * Create new shelf [CRUD(create)][DONE]
    */
@@ -104,8 +110,9 @@ const shelves = [
       });
     },
   },
+
   /**
-   * Assign topic to shelf [CRUD(modify)]
+   * Assign topic to shelf [CRUD(modify)][DONE]
    */
   {
     path: "/shelves/:shelfId/topic/:topicId",
@@ -136,33 +143,7 @@ const shelves = [
       });
     },
   },
-  /**
-   * Get shelves by topic
-   */
-  {
-    path: "/shelves/topic/:topicId",
-    method: METHOD_TYPE.GET,
-    handler: async (req: Request, res: Response) => {
-      const topicId: number = Number(req.params.topicId);
-      const filteredShelves = mockData.shelves.filter((shelf) => shelf.topic === topicId);
-      const data: any = [];
 
-      filteredShelves.forEach((shelf) => {
-        const shelfBooks = mockData.books.filter((bookObj) => bookObj.shelf === shelf.id);
-        data.push({
-          shelf,
-          shelfBooks,
-        });
-      });
-
-      if (data.length === 0) {
-        res.sendStatus(404);
-        return;
-      }
-
-      res.status(200).json(data);
-    },
-  },
   /**
    * Delete shelf [CRUD(remove)][DONE]
    */

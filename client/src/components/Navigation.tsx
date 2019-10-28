@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Link } from "react-router-dom";
 import MenuBurger from './MenuBurger';
 import { ILink } from '../interfaces/ILink';
-import UserContext from '../context/UserContext';
 
 export interface INavigationProps {
 }
@@ -61,45 +60,41 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 
     public render() {
         return (
-            <UserContext.Consumer>
-                {({ username, type, updateUser }) => (
-                    <nav className={`navbar ${this.state.isMenuOpen ? "navbar-mobile" : ""}`}>
-                        <ul>
-                            <li>
-                                <Link to='/' className="navbar-brand">
-                                    <i className="fas fa-book"> BookTap: {username} </i>
-                                </Link>
-                            </li>
+            <nav className={`navbar ${this.state.isMenuOpen ? "navbar-mobile" : ""}`}>
+                <ul>
+                    <li>
+                        <Link to='/' className="navbar-brand">
+                            <i className="fas fa-book"> BookTap </i>
+                        </Link>
+                    </li>
 
-                            {/* Desktop links */}
-                            {links.map((link: any, index) => (
-                                <li className="fl-right" key={index}>
-                                    <Link to={link.path} className={link.linkStyle.desktop}>
-                                        {link.text}
-                                    </Link>
-                                </li>
-                            ))}
+                    {/* Desktop links */}
+                    {links.map((link: any, index) => (
+                        <li className="fl-right" key={index}>
+                            <Link to={link.path} className={link.linkStyle.desktop}>
+                                {link.text}
+                            </Link>
+                        </li>
+                    ))}
 
-                            <li className="fl-right">
-                                <MenuBurger handleClick={this.handleClick} isMenuOpen={this.state.isMenuOpen} />
-                            </li>
-                        </ul>
+                    <li className="fl-right">
+                        <MenuBurger handleClick={this.handleClick} isMenuOpen={this.state.isMenuOpen} />
+                    </li>
+                </ul>
 
-                        {this.state.isMenuOpen && <ul>
-                            <hr className="divider"></hr>
-                            {/* Mobile links */}
-                            {links.map((link: any, index) => (
-                                <li style={{ display: "block", margin: 0, marginBottom: 5 }} onClick={this.handleClick} key={index}>
-                                    <Link to={link.path} className={link.linkStyle.mobile}>
-                                        {link.text}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>}
-                        <div className="clearfix"> </div>
-                    </nav>
-                )}
-            </UserContext.Consumer>
+                {this.state.isMenuOpen && <ul>
+                    <hr className="divider"></hr>
+                    {/* Mobile links */}
+                    {links.map((link: any, index) => (
+                        <li style={{ display: "block", margin: 0, marginBottom: 5 }} onClick={this.handleClick} key={index}>
+                            <Link to={link.path} className={link.linkStyle.mobile}>
+                                {link.text}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>}
+                <div className="clearfix"> </div>
+            </nav>
         );
     }
 }
