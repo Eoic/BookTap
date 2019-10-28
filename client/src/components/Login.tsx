@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import AuthUtils from '../utilities/AuthUtils';
 import ErrorList from './ErrorList';
-import UserContext from '../context/UserContext';
 
 export interface ILoginProps extends RouteComponentProps { }
 
