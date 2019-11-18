@@ -3,7 +3,9 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import AuthUtils from '../utilities/AuthUtils';
 import ErrorList from './ErrorList';
 
-export interface ILoginProps extends RouteComponentProps { }
+export interface ILoginProps extends RouteComponentProps {
+  updateAuthState: () => void,
+}
 
 export interface ILoginFieldsState {
   username: string,
@@ -17,7 +19,7 @@ export interface ILoginState extends ILoginFieldsState {
 export default class Login extends React.Component<ILoginProps, ILoginState> {
   constructor(props: ILoginProps) {
     super(props);
-
+    
     this.state = {
       username: "",
       password: "",
@@ -39,8 +41,11 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
     AuthUtils.login(this.state.username, this.state.password).then((response) => {
       if (typeof response.data.token !== "undefined") {
         AuthUtils.setToken(response.data.token);
+        this.props.updateAuthState();
+        this.props.history.push('/library');
+      } else {
+        this.props.history.push('/');
       }
-      this.props.history.push('/');
     }).catch((err) => {
       this.setState({ errors: err.response.data.errors });
     });
@@ -55,7 +60,7 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
             {this.state.errors.length > 0 && <ErrorList errors={this.state.errors} />}
             <input className="input" name="username" type="text" placeholder="Username" required onChange={this.handleChange} value={this.state.username}></input>
             <input className="input" name="password" type="password" placeholder="Password" required onChange={this.handleChange} value={this.state.password}></input>
-            <button type="submit" className="btn btn-purple btn-form"> Login </button>
+            <button type="submit" className="btn btn-purple btn-form"> SIGN IN </button>
             <Link to="password-reset" className="login-form-link subtitle"> Forgot your password? </Link>
           </form>
         </div>

@@ -82,6 +82,11 @@
     color: $gray;
 }
 
+.btn-active-purple {
+  color: #e7e7e7 !important;
+  background-color: #322d75;
+}
+
 .btn-purple:hover {
     background-color: $purple;
     border-color: $purple;
@@ -174,7 +179,7 @@ a {
 }
 
 .nav-link:hover {
-    border-bottom: 3px solid $green-dark;
+    border-bottom: 3px solid #625dff;
 }
 
 .hero-content {
@@ -187,10 +192,10 @@ a {
   justify-content: center;
   flex-direction: row;
   position: relative;
-  height: 68vh;
+  height: 60vh;
   background-color: $purple;
   min-height: 300px;
-  padding: 55px 55px 55px 55px;
+  padding: 55px 155px 55px 155px;
 
   h1 {
     font-size: 4em;
@@ -330,8 +335,18 @@ a {
     background-color: #ffffff;
     height: 100%;
     position: fixed;
-    padding: $library-sidebar-padding;
+    padding: 20px 20px 0px 55px;
     box-shadow: 1px 0px 3px 0px #826f6f;
+    overflow-y: auto;
+    height: auto;
+}
+
+.sidebar > ul li {
+  margin: 5px 0px;
+}
+
+.sidebar > ul > li button {
+  font-size: 1.1rem;
 }
 
 .sibebar-hamburger {
@@ -471,13 +486,26 @@ ul.menu-list > li > button {
   margin-bottom: 8px;
   box-sizing: border-box;
   font-weight: 500;
-  border: 1px solid #a5a5a5;
+  border: 1px solid #c9c9c9;
+  background-color: #e7e7e7;
   border-radius: 2px;
+  color: #4e4e4e;
 }
 
 .btn-form {
   width: 100%;
   font-size: 1.2rem;
+  padding: 12px;
+}
+
+.btn-sidebar {
+  transition: all 0.15s;
+  color: #2f2f2f;
+}
+
+.btn-sidebar:hover {
+  color: #e7e7e7;
+  background-color: $purple;
 }
 
 @include break-below(sm) {

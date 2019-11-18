@@ -147,15 +147,15 @@ const books = [
       if (extension === ".epub") {
         epubParser.parse(`${file.destination}/${file.filename}`, `${file.destination}/temp`, async (book: any) => {
           const bookInstance = getManager().create(Book, {
-            title: book.title._,
-            author: book.author,
+            title: String(book.title),
+            author: String(book.author),
             status: BookStatus.NotStarted,
-            description: book.description._,
+            description: (book.description) ? book.description._ : "",
             favourite: false,
             user,
             fsReference: book.fileName,
-            publisher: book.publisher._,
-            language: book.language,
+            publisher: String(book.publisher),
+            language: String(book.language),
             year: String(book.pubdate).substr(0, 4),
           });
 
@@ -163,7 +163,8 @@ const books = [
             res.status(201).json({
               message: "Book was uploaded successfully.",
             });
-          }).catch(() => {
+          }).catch((err) => {
+            console.log(err);
             res.sendStatus(400);
           });
         });
@@ -216,13 +217,38 @@ const books = [
     auth: verifyToken,
     handler: async (req: Request, res: Response) => {
       const id: number = Number(req.params.id);
+      const manager = getManager();
 
       if (isNaN(id)) {
         res.sendStatus(400);
         return;
       }
 
+      const user = await getManager().findOne(User, { id: (req.user as any).id });
+      const book = await getManager().findOne(Book, {
+        where: { id },
+        select: ["fsReference"],
+      });
+
+      if (!book) {
+        res.sendStatus(404);
+        return;
+      } else {
+        const b = await getManager().findOne(Book, {
+          where: { id, user },
+          select: ["fsReference"],
+        });
+
+        if (!b) {
+          res.sendStatus(403);
+          return;
+        }
+      }
+
       getManager().delete(Book, { id }).then((result) => {
+        const bookPath = path.join(__dirname, "../../", "uploads", `${user!.id}-${user!.username}`, `${book!.fsReference}`);
+        fs.unlinkSync(bookPath);
+
         if (result.affected === 0) {
           res.sendStatus(404);
           return;

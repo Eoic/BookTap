@@ -1,38 +1,65 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
 import MenuBurger from './MenuBurger';
-import { ILink } from '../interfaces/ILink';
 
 export interface INavigationProps {
+    isAuthenticated: boolean
 }
 
 export interface INavigationState {
     isMenuOpen: boolean
 }
 
+enum LinkType {
+    PrivateOnly,
+    PublicOnly,
+    Unprotected,
+}
+
 const links = [
     {
         path: "register",
         text: "Sign Up",
+        position: "fl-right",
+        linkType: LinkType.PublicOnly,
         linkStyle: {
             desktop: "btn btn-blue-outline",
-            mobile: "nav-mobile-link"
-        }
+        },
     },
     {
         path: "login",
         text: "Login",
+        position: "fl-right",
+        linkType: LinkType.PublicOnly,
         linkStyle: {
             desktop: "btn btn-green-outline",
-            mobile: "nav-mobile-link"
         }
     },
     {
         path: "logout",
         text: "Logout",
+        position: "fl-right",
+        linkType: LinkType.PrivateOnly,
         linkStyle: {
             desktop: "btn btn-red-outline",
-            mobile: "nav-mobile-link"
+        }
+    },
+    {
+        path: "library",
+        text: "Library",
+        position: "fl-right",
+        linkType: LinkType.PrivateOnly,
+        linkStyle: {
+            desktop: "nav-link"
+        }
+    },
+    {
+        path: "users",
+        text: "Users",
+        position: "fl-right",
+        linkType: LinkType.PrivateOnly,
+        linkStyle: {
+            desktop: "nav-link",
         }
     }
 ];
@@ -48,14 +75,10 @@ export default class Navigation extends React.Component<INavigationProps, INavig
         this.setState({ isMenuOpen: !this.state.isMenuOpen });
     }
 
-    createLink(link: ILink) {
-        return (
-            <li className={link.listStyle}>
-                <Link to={link.path} className={link.linkStyle}>
-                    {link.text}
-                </Link>
-            </li>
-        );
+    isLinkVisible(linkType: LinkType) {
+        return (linkType === LinkType.PrivateOnly && this.props.isAuthenticated) ||
+               (linkType ===  LinkType.PublicOnly && !this.props.isAuthenticated) ||
+               (linkType === LinkType.Unprotected);
     }
 
     public render() {
@@ -70,10 +93,13 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 
                     {/* Desktop links */}
                     {links.map((link: any, index) => (
-                        <li className="fl-right" key={index}>
-                            <Link to={link.path} className={link.linkStyle.desktop}>
-                                {link.text}
-                            </Link>
+                        <li className={link.position} key={index}>
+                            {
+                                this.isLinkVisible(link.linkType) && 
+                                <Link to={`/${link.path}`} className={link.linkStyle.desktop}>
+                                    {link.text}
+                                </Link>
+                            }
                         </li>
                     ))}
 
@@ -87,7 +113,7 @@ export default class Navigation extends React.Component<INavigationProps, INavig
                     {/* Mobile links */}
                     {links.map((link: any, index) => (
                         <li style={{ display: "block", margin: 0, marginBottom: 5 }} onClick={this.handleClick} key={index}>
-                            <Link to={link.path} className={link.linkStyle.mobile}>
+                            <Link to={link.path} className={"nav-mobile-link"}>
                                 {link.text}
                             </Link>
                         </li>

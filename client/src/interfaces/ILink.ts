@@ -3,5 +3,5 @@ export interface ILink {
     text: string;
     linkStyle: string;
     listStyle: string;
-    protected: boolean;
+    linkTyppe: boolean;
 }
