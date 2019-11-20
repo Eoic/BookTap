@@ -7,19 +7,19 @@
 // # Buttons
 // ## Base
 .btn {
-    padding: $btn-padding;
-    border-radius: $btn-border-radius;
-    border-color: $gray;
-    background-color: $white;
-    border-style: solid;
-    border-width: $btn-border-width;
-    transition: all $btn-transition-duration;
+  padding: $btn-padding;
+  border-radius: $btn-border-radius;
+  border-color: $gray;
+  background-color: $white;
+  border-style: solid;
+  border-width: $btn-border-width;
+  transition: all $btn-transition-duration;
 }
 
 // ## Green
 .btn-green {
-    background-color: $green;
-    color: $gray;
+  background-color: $green;
+  color: $gray;
 }
 
 .btn-green:hover {
@@ -38,12 +38,12 @@
 
 // ## Blue
 .btn-blue {
-    background-color: $blue-dark;
-    color: $gray;
+  background-color: $blue;
+  color: $gray;
 }
 
 .btn-blue:hover {
-    background-color: $blue;
+  background-color: $blue-dark;
 }
 
 .btn-blue-outline {
@@ -58,12 +58,12 @@
 
 // ## Red
 .btn-red {
-    background-color: $red-dark;
-    color: $gray;
+  background-color: $red-dark;
+  color: $gray;
 }
 
 .btn-red:hover {
-    background-color: $red;
+  background-color: $red;
 }
 
 .btn-red-outline {
@@ -78,8 +78,8 @@
 
 // ## Purple
 .btn-purple {
-    background-color: $purple-dark;
-    color: $gray;
+  background-color: $purple-dark;
+  color: $gray;
 }
 
 .btn-active-purple {
@@ -88,8 +88,8 @@
 }
 
 .btn-purple:hover {
-    background-color: $purple;
-    border-color: $purple;
+  background-color: $purple;
+  border-color: $purple;
 }
 
 // ## Button variations
@@ -112,7 +112,7 @@ a {
   height: $navbar-height;
   line-height: $navbar-height;
   background-color: #2f2f2f;
-  box-shadow: 0 1px 4px 1px $black;
+  box-shadow: 0px 0px 6px 1px $black;
   z-index: 1;
 }
 
@@ -170,16 +170,16 @@ a {
 }
 
 a {
-    text-decoration: none;
-    color: white;
+  text-decoration: none;
+  color: white;
 }
 
 .nav-link {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .nav-link:hover {
-    border-bottom: 3px solid #625dff;
+  border-bottom: 3px solid #625dff;
 }
 
 .hero-content {
@@ -328,17 +328,23 @@ a {
 
 // # Sidebar
 .sidebar {
-    top: $navbar-height;
-    left: 0;
-    bottom: 0;
-    width: $library-sidebar-width;
-    background-color: #ffffff;
-    height: 100%;
-    position: fixed;
-    padding: 20px 20px 0px 55px;
-    box-shadow: 1px 0px 3px 0px #826f6f;
-    overflow-y: auto;
-    height: auto;
+  top: $navbar-height;
+  left: 0;
+  bottom: 0;
+  width: $library-sidebar-width;
+  background-color: #ffffff;
+  height: 100%;
+  position: fixed;
+  padding: 20px 20px 0px 55px;
+  box-shadow: 1px 0px 3px 0px #826f6f;
+  overflow-y: auto;
+  height: auto;
+}
+
+@include break-below(sm) {
+  .sidebar {
+    padding-left: 20px;
+  }
 }
 
 .sidebar > ul li {
@@ -362,11 +368,19 @@ a {
 // Library
 .lib-content {
   margin-left: $library-sidebar-width + 2 * $library-sidebar-padding;
+  padding: 15px;
+  margin-right: 50px;
+}
+
+@include break-below(sm) {
+  .lib-content {
+    margin-right: 0px;
+  }
 }
 
 .subtitle {
   color: #4e4e4e;
-} 
+}
 
 // Misc
 hr.divider {
@@ -524,14 +538,14 @@ ul.menu-list > li > button {
 .divider-with-text {
   width: 100%;
   text-align: center;
-  border-bottom: 1px solid #000; 
+  border-bottom: 1px solid #000;
   line-height: 0.1em;
   margin: 10px 0 20px;
 }
 
-.divider-with-text span { 
-  background:#fff; 
-  padding: 0 10px; 
+.divider-with-text span {
+  background: #fff;
+  padding: 0 10px;
 }
 
 // Errors
@@ -546,6 +560,202 @@ ul.menu-list > li > button {
 .error-list {
   max-width: fit-content;
   text-align: left;
+}
+
+/* Font */
+.font-medium {
+  font-size: 16px;
+}
+
+/* Modal */
+.modal-cover {
+  background-color: rgba(35, 35, 35, 0.7);
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.modal {
+  transform: translateY(-50%);
+  position: absolute;
+  background-color: #eeeeee;
+  border-radius: 4px;
+  width: 400px;
+  top: 50%;
+  left: calc(50% - 200px);
+  padding-bottom: 15px;
+}
+
+.modal-header {
+  text-align: right;
+}
+
+.modal-body {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0px 15px;
+}
+
+.modal-btn {
+  @extend .btn;
+  color: #858585;
+  background-color: transparent;
+  font-size: 26px;
+  width: 45px;
+}
+
+.modal-upload-box {
+  border: 1px dashed #797979;
+  border-radius: 3px;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+// Books list
+.grid-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+}
+
+.grid-item {
+  background-color: #4b55ad;
+  height: 150px;
+  width: 100px;
+}
+
+// Common
+.container {
+  padding: 15px;
+  border-radius: 3px;
+  border: 1px solid #b3b3b3;
+  background-color: #fcfafa;
+}
+// ---
+
+// Topic list
+.topic-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 15px;
+}
+
+.topic {
+  @extend .container;
+}
+
+.topic:hover {
+  box-shadow: 0px 0px 3px 0px #797979;
+
+  .topic-btn {
+    visibility: visible;
+  }
+}
+
+.topic > a {
+  color: #101864;
+  margin: 8px 0px;
+  font-size: 24px;
+}
+
+.topic > a:hover {
+  text-decoration: underline solid #101864;
+}
+
+.topic > hr {
+  border: 1px solid #c2c2c2;
+}
+
+.topic-subtitle {
+  color: #4e4e4e;
+  margin: 8px 0px;
+}
+
+.topic-btn {
+  @extend .btn;
+  float: right;
+  background-color: transparent;
+  color: #616161;
+  visibility: hidden;
+  width: 30px;
+  height: 30px;
+  transition: all 0.1s;
+}
+
+.topic-btn-delete:hover {
+  background-color: $red;
+  color: #fcfafa;
+}
+
+// Shelves
+.shelf {
+  @extend .container;
+  width: 100%;
+  margin: 10px 0px;
+  box-sizing: border-box;
+
+  a {
+    color: #101864;
+    font-size: 24px;
+    display: inline-block;
+    margin: 8px 0 16px 0;
+  }
+
+  a:hover {
+    text-decoration: underline solid #101864;
+  }
+
+  div {
+    overflow: auto;
+    white-space: nowrap;
+    width: 100%;
+
+    .grid-item {
+      display: inline-block;
+      vertical-align: top;
+      white-space: normal;
+      width: 100px;
+      margin: 0 10px 10px 0;
+    }
+  }
+}
+
+// Book filter
+.book-filter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 10px;
+
+  input {
+    @extend .input;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+}
+
+// File input
+input[type="file"] {
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.input-label {
+  color: #4e49cc;
+}
+
+.input-label:hover,
+.input-label:focus {
+  text-decoration: solid underline #4e49cc;
 }
 
 @import "./partials/shame";
