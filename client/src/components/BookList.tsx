@@ -1,6 +1,8 @@
 import * as React from 'react';
 import BookFilter from './BookFilter';
 import UploadModal from './UploadModal';
+import Stepper from './Stepper';
+import Book from './Book';
 
 export interface IBookListProps {
 }
@@ -11,7 +13,7 @@ export default class BookList extends React.Component<IBookListProps> {
     let elements = [];
 
     for (let i = 0; i < count; i++) {
-      elements.push(<div key={i} className="grid-item"></div>);
+      elements.push(<Book key={i} author="Some very long  author" title="some title" />);
     }
 
     return elements;
@@ -27,6 +29,8 @@ export default class BookList extends React.Component<IBookListProps> {
         <section className="grid-list">
           {this.createMockList(15).map((item) => item)}
         </section>
+        <hr/>
+        <Stepper size={50} />
       </>
     );
   }

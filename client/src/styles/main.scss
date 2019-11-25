@@ -14,6 +14,7 @@
   border-style: solid;
   border-width: $btn-border-width;
   transition: all $btn-transition-duration;
+  cursor: pointer;
 }
 
 // ## Green
@@ -318,6 +319,7 @@ a {
   padding-left: 0;
 }
 
+// Text
 .text-left {
   text-align: left;
 }
@@ -567,6 +569,10 @@ ul.menu-list > li > button {
   font-size: 16px;
 }
 
+.font-small {
+  font-size: 12px;
+}
+
 /* Modal */
 .modal-cover {
   background-color: rgba(35, 35, 35, 0.7);
@@ -617,17 +623,49 @@ ul.menu-list > li > button {
   margin-bottom: 15px;
 }
 
+// Margins
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mr-20 {
+  margin-right: 20px;
+}
+
 // Books list
 .grid-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px; 
 }
 
-.grid-item {
-  background-color: #4b55ad;
-  height: 150px;
-  width: 100px;
+.book-grid-item {
+  background-color: #ececec;
+  height: 310px;
+  width: 160px;
+}
+
+.sub-menu {
+  background-color: #fcfafa;
+  position: relative;
+  top: -65px;
+  left: 155px;
+  box-shadow: 0px 0px 3px 1px #616161;
+  border-radius: 3px;
+  padding: 6px 0;
+}
+
+.sub-menu-item {
+  background-color: #fcfafa;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 4px 10px;
+}
+
+.sub-menu-item:hover {
+  background-color: #ebebeb;
 }
 
 // Common
@@ -637,7 +675,47 @@ ul.menu-list > li > button {
   border: 1px solid #b3b3b3;
   background-color: #fcfafa;
 }
+
+.book-cover {
+  height: 245px;
+  width: 160px;
+}
+
+.book-info {
+  box-sizing: border-box;
+
+  & > div:first-child {
+    margin: 0px;
+    float: left;
+
+    p {
+      margin: 0;
+      padding: 3px 8px;
+      text-overflow: ellipsis !important;
+      overflow: hidden !important;
+      width: 148px;
+      white-space: nowrap;
+    }
+  }
+
+  .btn {
+    float: right;
+    color: #616161;
+    background-color: transparent;
+    position: relative;
+    top: -52px;
+  }
+}
 // ---
+
+// Visibility
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
 
 // Topic list
 .topic-list {
