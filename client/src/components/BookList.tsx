@@ -13,7 +13,7 @@ export default class BookList extends React.Component<IBookListProps> {
     let elements = [];
 
     for (let i = 0; i < count; i++) {
-      elements.push(<Book key={i} author="Some very long  author" title="some title" />);
+      elements.push(<Book key={i} author="Some very very long  author" title="some very very long title" />);
     }
 
     return elements;

@@ -14,7 +14,7 @@ export default class Shelf extends React.Component<IShelfProps> {
         <p style={{ display: "inline", color: "grey"}}> {this.props.books.length} books </p>
         <div>
           {this.props.books.map((book, index) => (
-            <div key={index} className="grid-item">
+            <div key={index} className="book-grid-item">
               {book}
             </div>
           ))}

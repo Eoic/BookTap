@@ -108,12 +108,12 @@ a {
 
 // Navigation
 .navbar {
-  position: sticky;
+  position: fixed;
   width: 100%;
   height: $navbar-height;
   line-height: $navbar-height;
   background-color: #2f2f2f;
-  box-shadow: 0px 0px 6px 1px $black;
+  box-shadow: 0px 0px 6px 0px $black;
   z-index: 1;
 }
 
@@ -338,7 +338,7 @@ a {
   height: 100%;
   position: fixed;
   padding: 20px 20px 0px 55px;
-  box-shadow: 1px 0px 3px 0px #826f6f;
+  box-shadow: 1px 0px 8px 0px #aaa5a5;
   overflow-y: auto;
   height: auto;
 }
@@ -370,7 +370,7 @@ a {
 // Library
 .lib-content {
   margin-left: $library-sidebar-width + 2 * $library-sidebar-padding;
-  padding: 15px;
+  padding: 5rem 15px 15px 15px;
   margin-right: 50px;
 }
 
@@ -456,7 +456,8 @@ ul.menu-list > li > button {
 // Login
 .form-wrapper {
   background-color: $purple;
-  height: calc(100% - 4rem);
+  height: 100%;
+  padding-top: 4rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -505,7 +506,8 @@ ul.menu-list > li > button {
   border: 1px solid #c9c9c9;
   background-color: #e7e7e7;
   border-radius: 2px;
-  color: #4e4e4e;
+  color: #353535;
+  font-family: "Open Sans", sans-serif;
 }
 
 .btn-form {
@@ -524,7 +526,7 @@ ul.menu-list > li > button {
   background-color: $purple;
 }
 
-@include break-below(sm) {
+@include break-below(xs) {
   .login-form {
     min-width: 100%;
     border-radius: 0px;
@@ -576,7 +578,7 @@ ul.menu-list > li > button {
 /* Modal */
 .modal-cover {
   background-color: rgba(35, 35, 35, 0.7);
-  position: absolute;
+  position: fixed;
   display: block;
   top: 0;
   left: 0;
@@ -615,6 +617,10 @@ ul.menu-list > li > button {
   width: 45px;
 }
 
+.modal-btn:hover {
+  color: crimson;
+}
+
 .modal-upload-box {
   border: 1px dashed #797979;
   border-radius: 3px;
@@ -636,6 +642,7 @@ ul.menu-list > li > button {
 .grid-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  overflow: hidden;
   gap: 15px; 
 }
 
@@ -643,6 +650,7 @@ ul.menu-list > li > button {
   background-color: #ececec;
   height: 310px;
   width: 160px;
+  //background-color: crimson;
 }
 
 .sub-menu {
@@ -794,12 +802,12 @@ ul.menu-list > li > button {
     white-space: nowrap;
     width: 100%;
 
-    .grid-item {
+    .book-grid-item {
       display: inline-block;
       vertical-align: top;
       white-space: normal;
-      width: 100px;
       margin: 0 10px 10px 0;
+      width: 160px;
     }
   }
 }
