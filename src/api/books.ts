@@ -3,9 +3,11 @@ import exiftoolBin from "dist-exiftool";
 import epubParser from "epub-metadata-parser";
 import { Request, Response } from "express";
 import fs from "fs";
+import gm from "gm";
 import multer from "multer";
 import exiftool from "node-exiftool";
 import path from "path";
+import pdfImage from "pdf-image";
 import { getManager } from "typeorm";
 import { Book, BookStatus } from "../models/Book";
 import { Shelf } from "../models/Shelf";
@@ -152,6 +154,7 @@ const books = [
             status: BookStatus.NotStarted,
             description: (book.description) ? book.description._ : "",
             favourite: false,
+            originalFilename: file.originalname,
             user,
             fsReference: book.fileName,
             publisher: String(book.publisher),
@@ -170,40 +173,82 @@ const books = [
         });
       } else if (extension === ".pdf") {
         const ep = new exiftool.ExiftoolProcess(exiftoolBin);
+        const pathToFile = `${file.destination}/${file.filename}`;
+        const img = new pdfImage.PDFImage(pathToFile);
+        img.convertPage(0).then((imgPath: any) => {
+          ep
+            .open()
+            .then(() => ep.readMetadata(pathToFile, ["-File:all"]))
+            .then((result: any, error: any) => {
 
-        ep
-          .open()
-          .then(() => ep.readMetadata(`${file.destination}/${file.filename}`, ["-File:all"]))
-          .then((result: any, error: any) => {
-            if (error) {
-              res.sendStatus(400);
-              return;
-            }
+              if (error) {
+                res.sendStatus(400);
+                return;
+              }
 
-            const bookInstance = getManager().create(Book, {
-              title: result.data[0].Title,
-              author: result.data[0].Author,
-              status: BookStatus.NotStarted,
-              description: "",
-              favourite: false,
-              user,
-              fsReference: file.filename,
-              publisher: "",
-              language: "EN",
-              year: String(result.data[0].CreateDate).substr(0, 4),
-            });
-
-            bookInstance.save().then(() => {
-              res.status(201).json({
-                message: "Book was uploaded successfully.",
+              const bookInstance = getManager().create(Book, {
+                title: result.data[0].Title,
+                author: result.data[0].Author,
+                status: BookStatus.NotStarted,
+                description: "",
+                favourite: false,
+                user,
+                fsReference: file.filename,
+                originalFilename: file.originalname,
+                publisher: "",
+                language: "EN",
+                year: String(result.data[0].CreateDate).substr(0, 4),
               });
-            }).catch(() => {
-              res.sendStatus(400);
-            });
-          })
-          .then(() => ep.close())
-          .then(() => console.log("Closed exiftool"))
-          .catch(console.error);
+
+              bookInstance.save().then(() => {
+                res.status(201).json({
+                  message: "Book was uploaded successfully.",
+                });
+              }).catch(() => {
+                res.sendStatus(400);
+              });
+            })
+            .then(() => ep.close())
+            .catch(console.error);
+        });
+      }
+    },
+  },
+
+  /**
+   * Get book cover
+   */
+  {
+    path: "/books/:id/cover",
+    method: METHOD_TYPE.GET,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const id: number = Number(req.params.id);
+      const user = await getManager().findOne(User, { id: (req.user as any).id });
+
+      if (!user) {
+        res.sendStatus(400);
+        return;
+      }
+
+      const book = await getManager().findOne(Book, {
+        where: { id, user },
+        select: ["fsReference"],
+      });
+
+      if (!book) {
+        res.sendStatus(404);
+        return;
+      } else {
+        const extension = book.fsReference.substr(book.fsReference.length - 4);
+        const image = book.fsReference.replace(extension, "-0.png");
+        const folder = `${user.id}-${user.username}`;
+        const filePath = path.join(__dirname, "../../", "uploads", folder, `${image}`);
+
+        // Encode image
+        const img = fs.readFileSync(filePath);
+        const imgEncoded = new Buffer(img).toString("base64");
+        res.status(200).json({ image: imgEncoded });
       }
     },
   },
@@ -231,6 +276,7 @@ const books = [
       });
 
       if (!book) {
+        console.log("BOOK NOT FOUND");
         res.sendStatus(404);
         return;
       } else {
@@ -250,9 +296,11 @@ const books = [
         fs.unlinkSync(bookPath);
 
         if (result.affected === 0) {
+          console.log("FAILED TO DELETE");
           res.sendStatus(404);
           return;
         }
+
         res.status(200).json({
           message: "Book was deleted successfully.",
         });

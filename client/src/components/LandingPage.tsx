@@ -10,9 +10,9 @@ export default class LandingPage extends React.Component<ILandingPageProps> {
   public render() {
     return (
       <>
-        <Header/>
-        <Main/>
-        <Footer/>
+        <Header />
+        <Main />
+        <Footer />
       </>
     );
   }

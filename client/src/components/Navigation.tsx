@@ -45,7 +45,16 @@ const links = [
         }
     },
     {
-        path: "library",
+        path: "profile",
+        text: "My Profile",
+        position: "fl-right",
+        linkType: LinkType.PrivateOnly,
+        linkStyle: {
+            desktop: "nav-link"
+        }
+    },
+    {
+        path: "library/all-books",
         text: "Library",
         position: "fl-right",
         linkType: LinkType.PrivateOnly,

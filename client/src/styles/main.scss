@@ -4,6 +4,23 @@
 @import "./partials/reset";
 @import "./partials/mixins";
 
+// # Colors
+.color-purple {
+  color: #4e49cc;
+}
+
+.color-green {
+  color: $green;
+}
+
+.color-gray {
+  color: #5f5f5f;
+}
+
+.color-red {
+  color: $red;
+}
+
 // # Buttons
 // ## Base
 .btn {
@@ -196,7 +213,7 @@ a {
   height: 60vh;
   background-color: $purple;
   min-height: 300px;
-  padding: 55px 155px 55px 155px;
+  padding: 5rem 155px 55px 155px;
 
   h1 {
     font-size: 4em;
@@ -497,14 +514,14 @@ ul.menu-list > li > button {
 
 .input {
   display: block;
-  padding: 10px;
-  font-size: 1.2rem;
+  padding: 8px;
+  font-size: 1.05rem;
   width: 100%;
   margin-bottom: 8px;
   box-sizing: border-box;
   font-weight: 500;
   border: 1px solid #c9c9c9;
-  background-color: #e7e7e7;
+  background-color: #ffffff;
   border-radius: 2px;
   color: #353535;
   font-family: "Open Sans", sans-serif;
@@ -627,6 +644,7 @@ ul.menu-list > li > button {
   padding: 10px;
   text-align: center;
   margin-bottom: 15px;
+  min-height: 160px;
 }
 
 // Margins
@@ -641,9 +659,9 @@ ul.menu-list > li > button {
 // Books list
 .grid-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   overflow: hidden;
-  gap: 15px; 
+  gap: 15px;
 }
 
 .book-grid-item {
@@ -653,16 +671,6 @@ ul.menu-list > li > button {
   //background-color: crimson;
 }
 
-.sub-menu {
-  background-color: #fcfafa;
-  position: relative;
-  top: -65px;
-  left: 155px;
-  box-shadow: 0px 0px 3px 1px #616161;
-  border-radius: 3px;
-  padding: 6px 0;
-}
-
 .sub-menu-item {
   background-color: #fcfafa;
   border: none;
@@ -670,6 +678,20 @@ ul.menu-list > li > button {
   width: 100%;
   text-align: left;
   padding: 4px 10px;
+}
+
+.sub-menu {
+  background-color: #fcfafa;
+  position: relative;
+  top: -216px;
+  left: 155px;
+  box-shadow: 0px 0px 3px 1px #616161;
+  border-radius: 3px;
+  padding: 6px 0;
+
+  & > button {
+    @extend .sub-menu-item;
+  }
 }
 
 .sub-menu-item:hover {
@@ -828,11 +850,11 @@ ul.menu-list > li > button {
 // File input
 input[type="file"] {
   width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 
 .input-label {
@@ -842,6 +864,74 @@ input[type="file"] {
 .input-label:hover,
 .input-label:focus {
   text-decoration: solid underline #4e49cc;
+}
+
+// Profile
+.padding-from-nav {
+  padding-top: $navbar-height;
+}
+
+.profile {
+  @extend .padding-from-nav;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  & > h3 {
+    margin: 16px 0px;
+  }
+}
+
+.form {
+  margin: 0 auto;
+  background-color: #fafafa;
+  border: 1px solid #cfcfcf;
+  padding: 25px;
+  margin-bottom: 15px;
+}
+
+.form-input {
+  display: block;
+
+  & > input {
+    @extend .input;
+    display: inline-block;
+    width: auto;
+    padding: 5px;
+    font-size: 15px;
+    width: 300px;
+  }
+
+  & > label {
+    text-align: right;
+    width: 190px;
+    display: inline-block;
+    font-size: 18px;
+    color: #2f2f2f;
+    padding-right: 20px;
+  }
+}
+
+@include break-below(sm) {
+  .form-input {
+    & > input {
+      display: block;
+      width: 100%;
+    }
+
+    & > label {
+      display: block;
+      text-align: left;
+    }
+  }
+}
+
+// Paragraph
+.clip-overflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @import "./partials/shame";

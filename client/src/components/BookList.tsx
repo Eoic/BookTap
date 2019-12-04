@@ -3,35 +3,61 @@ import BookFilter from './BookFilter';
 import UploadModal from './UploadModal';
 import Stepper from './Stepper';
 import Book from './Book';
+import { bookStore, STORE_EVENTS } from "../stores/BookStore";
+import { getBooks } from "../actions/BookActions";
+import uuid from 'uuid/v4';
 
 export interface IBookListProps {
 }
 
-export default class BookList extends React.Component<IBookListProps> {
+export interface IBookListState {
+	books: [],
+}
 
-  createMockList(count: number) {
-    let elements = [];
+export default class BookList extends React.Component<IBookListProps, IBookListState> {
+	constructor(props: IBookListProps) {
+		super(props);
+		this.state = { books: bookStore.getBooks() }
+		this.updateBookList = this.updateBookList.bind(this);
+		this.handleUpdateRequired = this.handleUpdateRequired.bind(this);
+	}
 
-    for (let i = 0; i < count; i++) {
-      elements.push(<Book key={i} author="Some very very long  author" title="some very very long title" />);
-    }
+	updateBookList() {
+		this.setState({ books: bookStore.getBooks() });
+	}
 
-    return elements;
-  }
+	handleUpdateRequired() {
+		getBooks();
+	}
 
-  public render() {
-    return (
-      <>
-        <UploadModal />
-        <hr />
-        <BookFilter />
-        <hr />
-        <section className="grid-list">
-          {this.createMockList(15).map((item) => item)}
-        </section>
-        <hr/>
-        <Stepper size={50} />
-      </>
-    );
-  }
+	componentDidMount() {
+		bookStore.on(STORE_EVENTS.UPDATED, this.updateBookList);
+		bookStore.on(STORE_EVENTS.UPDATE_REQUIRED, this.handleUpdateRequired);
+		getBooks();
+	}
+
+	componentWillUnmount() {
+		bookStore.removeListener(STORE_EVENTS.UPDATED, this.updateBookList);
+		bookStore.removeListener(STORE_EVENTS.UPDATE_REQUIRED, this.handleUpdateRequired);
+	}
+
+	public render() {
+		return (
+			<>
+				<UploadModal />
+				<BookFilter />
+				<section className={`${(this.state.books.length > 0) ? "grid-list" : ""}`}>
+					{this.state.books.map((book: any, index) => (
+						<Book key={uuid()} author={book.author} title={book.title} id={book.id} filename={book.originalFilename} />
+					))}
+					{this.state.books.length === 0 && <div style={{ textAlign: "center", width: "100%" }}>
+						<i className="far fa-folder-open fa-5x color-gray" />
+						<h4 className="color-gray"> No books uploaded yet... </h4>
+					</div>}
+				</section>
+				<hr />
+				<Stepper size={50} />
+			</>
+		);
+	}
 }

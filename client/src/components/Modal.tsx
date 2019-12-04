@@ -8,7 +8,8 @@ export interface IModalProps {
         text: string,
         icon?: string,
     },
-    closeOnAction?: boolean
+    closeOnAction?: boolean,
+    onCloseEvent?: () => void,
 }
 
 export interface IModalState {
@@ -24,7 +25,10 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     }
 
     open = () => this.setState({ isOpen: true });
-    close = () => this.setState({ isOpen: false });
+    close = () => { 
+        this.setState({ isOpen: false });
+        this.props.onCloseEvent && this.props.onCloseEvent();
+    }
 
     public render() {
         return (
@@ -41,7 +45,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                         <div className="modal-body">
                             {this.props.children}
                             <div onClick={() => (this.props.closeOnAction) && this.close()} style={{ display: "inline" }}>
-                                {this.props.action}
+                                {this.props.action || undefined}
                             </div>
                         </div>
                     </div>

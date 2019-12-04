@@ -10,6 +10,7 @@ import PasswordReset from "./PasswordReset";
 import AuthUtils from "../utilities/AuthUtils";
 import Logout from "./Logout";
 import Users from "./Users";
+import Profile from "./Profile";
 
 export interface IAppProps {
 }
@@ -39,6 +40,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
         <Route path="/login" render={(props) => <Login {...props} updateAuthState={this.updateAuthState} />} />
         <Route path="/register" render={(props) => <Register {...props} updateAuthState={this.updateAuthState} />} />
         <Route path="/logout" render={(props) => <Logout {...props} updateAuthState={this.updateAuthState} />} />
+        <Route path="/profile" component={Profile} />
         <Route path="/password-reset" component={PasswordReset} />
         <Route path="/library" component={Library} />
         <Route path="/users" component={Users} />

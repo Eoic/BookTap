@@ -47,6 +47,7 @@ const login = [{
                 id: user.id,
                 username: user.username,
                 userType: user.userType,
+                email: user.email,
             }, String(process.env.JWT_SECRET), {
                 expiresIn: String(process.env.JWT_VALID_FOR),
             });

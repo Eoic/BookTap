@@ -81,6 +81,7 @@ const register = [{
           id: result.id,
           username: result.username,
           userType: result.userType,
+          email: result.email,
         }, String(process.env.JWT_SECRET), {
           expiresIn: String(process.env.JWT_VALID_FOR),
         });

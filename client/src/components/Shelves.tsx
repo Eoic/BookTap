@@ -50,7 +50,7 @@ export default class Shelves extends React.Component<IShelvesProps, IShelvesStat
 					action={<button className="btn btn-blue font-medium" type="submit" onClick={this.handleSubmit} form="add-shelf-form"> CREATE </button>}
 					closeOnAction={false}
 					title={"ADD NEW SHELF"}>
-					<form className="form" id="add-shelf-form">
+					<form id="add-shelf-form">
 						<input className="input" required type="text" placeholder="Title" name="title" onChange={this.handleChange} value={this.state.title} />
 						<textarea className="input" placeholder="Description" name="description" onChange={this.handleChange} value={this.state.description} />
 					</form>

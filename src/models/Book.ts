@@ -35,6 +35,9 @@ export class Book extends BaseEntity {
     @Column({ length: 255 })
     public fsReference!: string;
 
+    @Column({ length: 255 })
+    public originalFilename!: string;
+
     // User defined
     @Column()
     public favourite!: boolean;

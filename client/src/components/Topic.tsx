@@ -7,14 +7,10 @@ export interface ITopicProps {
 }
 
 export default class Topic extends React.Component<ITopicProps> {
-  constructor(props: ITopicProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <div className="topic">
-        <a href="#"> {this.props.title} </a>
+        <a href="/"> {this.props.title} </a>
         <button className="topic-btn topic-btn-delete">
           <i className="fas fa-trash" />
         </button>
