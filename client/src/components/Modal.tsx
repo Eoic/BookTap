@@ -34,7 +34,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         return (
             <>
                 {this.state.isOpen && <div className="modal-cover">
-                    <div className="modal">
+                    <div className="modal modal-small">
                         <div className="modal-header">
                             <h4 style={{ display: "inline", float: "left", margin: 0, paddingLeft: 15, paddingTop: 12}}> {this.props.title} </h4>
                             <button className="modal-btn" onClick={this.close}>

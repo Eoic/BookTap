@@ -17,8 +17,7 @@ export default class SubMenu extends React.Component<ISubMenuProps> {
                 <button onClick={() => { deleteBook(this.props.id); this.props.hideMenu(); }}> Delete </button>
                 <button onClick={() => console.log("Clicked")}> View info </button>
                 <button onClick={() => { downloadBook(this.props.id, this.props.filename); this.props.hideMenu() }}> Download </button>
-                <button onClick={() => console.log("Clicked")}> Assign shelf </button>
-                <button onClick={() => console.log("Clicked")}> Assign topic </button>
+                <button onClick={() => console.log("Clicked")}> Add to shelf </button>
             </div>
         );
     }

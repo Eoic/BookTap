@@ -46,16 +46,7 @@ export default class Shelves extends React.Component<IShelvesProps, IShelvesStat
 	public render() {
 		return (
 			<section>
-				<Modal trigger={{ style: "btn btn-green font-medium", icon: "plus", text: "ADD SHELF" }}
-					action={<button className="btn btn-blue font-medium" type="submit" onClick={this.handleSubmit} form="add-shelf-form"> CREATE </button>}
-					closeOnAction={false}
-					title={"ADD NEW SHELF"}>
-					<form id="add-shelf-form">
-						<input className="input" required type="text" placeholder="Title" name="title" onChange={this.handleChange} value={this.state.title} />
-						<textarea className="input" placeholder="Description" name="description" onChange={this.handleChange} value={this.state.description} />
-					</form>
-					<hr />
-				</Modal>
+				
 				<hr />
 				{this.createMockList(5).map((shelf) => shelf)}
 			</section>

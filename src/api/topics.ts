@@ -19,7 +19,7 @@ const topics = [
     handler: async (req: Request, res: Response) => {
       const user = await getManager().findOne(User, (req.user as any).id);
       const topicList = await getManager().find(Topic, { where: { user } });
-      res.status(200).json(topicList);
+      res.status(200).json({ topics: topicList });
     },
   },
 

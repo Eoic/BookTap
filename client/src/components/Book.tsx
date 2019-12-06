@@ -3,12 +3,14 @@ import SubMenu from './SubMenu';
 import { getCover } from '../actions/BookActions';
 import { any } from 'prop-types';
 import uuid from "uuid/v4";
+import Favourite from './Favourite';
 
 export interface IBookProps {
 	id: number,
 	title: string,
 	author: string,
 	filename: string,
+	isFavourite: boolean,
 }
 
 export interface IBookState {
@@ -47,6 +49,7 @@ export default class Book extends React.Component<IBookProps, IBookState> {
 	public render() {
 		return (
 			<div className="book-grid-item">
+				<Favourite bookId={this.props.id} isMarked={this.props.isFavourite} />
 				<img className="book-cover" src={`data:image/png;base64,${this.state.cover}`} />
 				<div className="book-info">
 					<div>

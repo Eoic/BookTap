@@ -48,7 +48,12 @@ export default class BookList extends React.Component<IBookListProps, IBookListS
 				<BookFilter />
 				<section className={`${(this.state.books.length > 0) ? "grid-list" : ""}`}>
 					{this.state.books.map((book: any, index) => (
-						<Book key={uuid()} author={book.author} title={book.title} id={book.id} filename={book.originalFilename} />
+						<Book key={uuid()} 
+							  author={book.author} 
+							  title={book.title} 
+							  id={book.id} 
+							  filename={book.originalFilename}
+							  isFavourite={book.favourite} />
 					))}
 					{this.state.books.length === 0 && <div style={{ textAlign: "center", width: "100%" }}>
 						<i className="far fa-folder-open fa-5x color-gray" />

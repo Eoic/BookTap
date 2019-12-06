@@ -609,10 +609,13 @@ ul.menu-list > li > button {
   position: absolute;
   background-color: #eeeeee;
   border-radius: 4px;
-  width: 400px;
   top: 50%;
   left: calc(50% - 200px);
   padding-bottom: 15px;
+}
+
+.modal-small {
+  width: 420px;
 }
 
 .modal-header {
@@ -668,7 +671,20 @@ ul.menu-list > li > button {
   background-color: #ececec;
   height: 310px;
   width: 160px;
-  //background-color: crimson;
+  margin: 3px 2px;
+  transition: all 0.2s;
+
+  & > .favourite-mark {
+    display: none;
+  }
+}
+
+.book-grid-item:hover {
+  box-shadow: 0px 0px 5px 0px #a9a9a9;
+  
+  & > .favourite-mark {
+    display: initial;
+  }
 }
 
 .sub-menu-item {
@@ -683,8 +699,9 @@ ul.menu-list > li > button {
 .sub-menu {
   background-color: #fcfafa;
   position: relative;
-  top: -216px;
+  top: -199px;
   left: 155px;
+  width: 115px;
   box-shadow: 0px 0px 3px 1px #616161;
   border-radius: 3px;
   padding: 6px 0;
@@ -709,6 +726,13 @@ ul.menu-list > li > button {
 .book-cover {
   height: 245px;
   width: 160px;
+}
+
+.favourite-mark {
+  position: absolute;
+  padding: 5px;
+  font-size: 21px;
+  color: #4d4d4d;
 }
 
 .book-info {
@@ -755,29 +779,12 @@ ul.menu-list > li > button {
 }
 
 .topic {
-  @extend .container;
+  color: #101864;
+  font-weight: 500;
 }
 
 .topic:hover {
-  box-shadow: 0px 0px 3px 0px #797979;
-
-  .topic-btn {
-    visibility: visible;
-  }
-}
-
-.topic > a {
-  color: #101864;
-  margin: 8px 0px;
-  font-size: 24px;
-}
-
-.topic > a:hover {
   text-decoration: underline solid #101864;
-}
-
-.topic > hr {
-  border: 1px solid #c2c2c2;
 }
 
 .topic-subtitle {
@@ -832,6 +839,13 @@ ul.menu-list > li > button {
       width: 160px;
     }
   }
+}
+
+.add-shelf-btn {
+  margin-top: 4px;
+  font-size: 15px !important; 
+  width: 100%;
+  margin-left: 0px;
 }
 
 // Book filter
@@ -932,6 +946,32 @@ input[type="file"] {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.table {
+  width: 100%;
+
+  color: #505050;
+  border-radius: 3px;
+  border-collapse: collapse;
+  
+  thead > tr {
+    background-color: #f1f1f1;
+  }
+
+  tr:hover {
+    background-color: #e7e7e7;
+    border-radius: 3px;
+
+  }
+
+  td, th {
+    padding: 7px 10px;
+  }
+}
+
+.table, th, td {
+  border: 1px solid #d1d1d1;
 }
 
 @import "./partials/shame";
