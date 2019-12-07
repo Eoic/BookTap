@@ -11,6 +11,7 @@ import ReadingFinished from './ReadingFinished';
 import SidebarSection from './SidebarSection';
 import ShelfList from './ShelfList';
 import Topic from './Topic';
+import Shelf from './Shelf';
 
 const links = {
 	browse: [
@@ -153,8 +154,9 @@ class Library extends React.Component<ILibraryProps, ILibraryState> {
 				<section className="lib-content">
 					<Route path="/library/all-books" component={BookList} />
 					<Route path="/library/topics" component={Topics} />
-					<Route path="/library/topic/:id" component={Topic} />					
+					<Route path="/library/topic/:id" component={Topic} />
 					{/*<Route path="/library/shelf" component={Shelves} />*/}
+					<Route path="/library/shelf/:id" render={(props) => <Shelf {...props} />} />
 					<Route path="/library/reading-summary" component={ReadingSummary} />
 					<Route path="/library/reading-in-progress" component={ReadingInProgress} />
 					<Route path="/library/reading-finished" component={ReadingFinished} />

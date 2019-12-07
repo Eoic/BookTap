@@ -4,7 +4,7 @@ import AuthUtils from '../utilities/AuthUtils';
 import ErrorList from './ErrorList';
 
 export interface IRegisterProps extends RouteComponentProps {
-  updateAuthState: () => void
+  updateAuthState: (callback?: () => void) => void
 }
 
 export interface IRegisterFieldsState {

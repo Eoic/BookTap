@@ -26,10 +26,10 @@ export default class App extends React.Component<IAppProps, IAppState> {
     this.updateAuthState = this.updateAuthState.bind(this);
   }
 
-  updateAuthState = (): void => {
+  updateAuthState = (callback?: () => void): void => {
     this.setState({
       isAuthenticated: AuthUtils.isLoggedIn(),
-    });
+    }, () => callback && callback());
   }
 
   public render() {

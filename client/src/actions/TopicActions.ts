@@ -6,8 +6,10 @@ const URL = {
     TOPICS: "/topics"
 }
 
-const config = {
-    headers: { "Authorization": "Bearer " + AuthUtils.getToken() }
+const getConfig = () => {
+    return {
+        headers: { "Authorization": "Bearer " + AuthUtils.getToken() }
+    }
 }
 
 export const TOPIC_ACTIONS = {
@@ -16,7 +18,7 @@ export const TOPIC_ACTIONS = {
 }
 
 export function getTopics() {
-    axios.get(URL.TOPICS, config).then((response) => {
+    axios.get(URL.TOPICS, getConfig()).then((response) => {
         dispatcher.dispatch({
             value: response.data.topics,
             type: TOPIC_ACTIONS.GET_TOPICS,
@@ -25,7 +27,7 @@ export function getTopics() {
 }
 
 export function addTopic(data: { title: string, description: string }) {
-    axios.post(URL.TOPICS, data, config).then((response) => {
+    axios.post(URL.TOPICS, data, getConfig()).then((response) => {
         dispatcher.dispatch({
             type: TOPIC_ACTIONS.ADD_TOPIC,
             value: response.data,

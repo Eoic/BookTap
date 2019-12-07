@@ -1,22 +1,15 @@
 import * as React from 'react';
 import SubMenu from './SubMenu';
-import { getCover } from '../actions/BookActions';
-import { any } from 'prop-types';
-import uuid from "uuid/v4";
 import Favourite from './Favourite';
+import uuid from 'uuid';
 
 export interface IBookProps {
-	id: number,
-	title: string,
-	author: string,
-	filename: string,
-	isFavourite: boolean,
+	book: any,
 }
 
 export interface IBookState {
 	isMenuOpen: boolean,
 	isMenuHovered: boolean,
-	cover: any,
 }
 
 export default class Book extends React.Component<IBookProps, IBookState> {
@@ -25,13 +18,11 @@ export default class Book extends React.Component<IBookProps, IBookState> {
 		this.state = {
 			isMenuOpen: false,
 			isMenuHovered: false,
-			cover: any,
 		}
 
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.hideMenu = this.hideMenu.bind(this);
 		this.setMenuHoverState = this.setMenuHoverState.bind(this);
-		getCover(this.props.id, (data) => { this.setState({ cover: data }); });
 	}
 
 	toggleMenu() {
@@ -49,18 +40,19 @@ export default class Book extends React.Component<IBookProps, IBookState> {
 	public render() {
 		return (
 			<div className="book-grid-item">
-				<Favourite bookId={this.props.id} isMarked={this.props.isFavourite} />
-				<img className="book-cover" src={`data:image/png;base64,${this.state.cover}`} />
+				<Favourite bookId={this.props.book.id} isMarked={this.props.book.isFavourite} />
+				<img className="book-cover" src={`data:image/png;base64,${this.props.book.cover}`} />
+
 				<div className="book-info">
 					<div>
-						<p title={this.props.title}>{this.props.title}</p>
-						<p title={this.props.author} className="font-small">{this.props.author}</p>
+						<p title={this.props.book.title}>{this.props.book.title}</p>
+						<p title={this.props.book.author} className="font-small">{this.props.book.author}</p>
 					</div>
 					<button className="btn" onClick={this.toggleMenu} onBlur={() => !this.state.isMenuHovered && this.hideMenu()}>
 						<i className="fas fa-ellipsis-v" />
 					</button>
 					<div className="clearfix" />
-					<SubMenu isOpen={this.state.isMenuOpen} setMenuHoverState={this.setMenuHoverState} hideMenu={this.hideMenu} id={this.props.id} filename={this.props.filename} />
+					<SubMenu isOpen={this.state.isMenuOpen} setMenuHoverState={this.setMenuHoverState} hideMenu={this.hideMenu} id={this.props.book.id} filename={this.props.book.originalFilename} />
 				</div>
 			</div>
 		);

@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import exiftoolBin from "dist-exiftool";
 import epubParser from "epub-metadata-parser";
-import { Request, Response } from "express";
+import { Request, Response, response } from "express";
 import fs from "fs";
 import gm from "gm";
 import multer from "multer";
@@ -56,6 +56,22 @@ const books = [
     handler: async (req: Request, res: Response) => {
       const user = await getManager().findOne(User, (req.user as any).id);
       const bookList = await getManager().find(Book, { where: { user } });
+
+      if (user) {
+        const folder = `${user.id}-${user.username}`;
+
+        bookList.forEach((book: any) => {
+          const extension = book.fsReference.substr(book.fsReference.length - 4);
+          const image = book.fsReference.replace(extension, "-0.png");
+          const filePath = path.join(__dirname, "../../", "uploads", folder, `${image}`);
+
+          // Encode image
+          const img = fs.readFileSync(filePath);
+          const imgEncoded = Buffer.from(img).toString("base64");
+          book.cover = imgEncoded;
+        });
+      }
+
       res.status(200).json(bookList);
     },
   },
@@ -114,13 +130,17 @@ const books = [
             return;
           }
 
+          const stat = fs.statSync(filePath);
+
           // Send file
-          res.sendFile(filePath, (error) => {
-            if (error) {
-              res.sendStatus(404);
-              return;
-            }
+          response.writeHead(200, {
+            "Content-Length": stat.size,
+            "Content-Type": "application/pdf",
+            "Content-Disposition": `attachment; filename = ${book.originalFilename}`,
           });
+
+          const readableStream = fs.createReadStream(filePath);
+          readableStream.pipe(res);
         });
       } else {
         res.sendStatus(404);
@@ -175,6 +195,7 @@ const books = [
         const ep = new exiftool.ExiftoolProcess(exiftoolBin);
         const pathToFile = `${file.destination}/${file.filename}`;
         const img = new pdfImage.PDFImage(pathToFile);
+
         img.convertPage(0).then((imgPath: any) => {
           ep
             .open()
@@ -240,14 +261,7 @@ const books = [
         res.sendStatus(404);
         return;
       } else {
-        const extension = book.fsReference.substr(book.fsReference.length - 4);
-        const image = book.fsReference.replace(extension, "-0.png");
-        const folder = `${user.id}-${user.username}`;
-        const filePath = path.join(__dirname, "../../", "uploads", folder, `${image}`);
-
-        // Encode image
-        const img = fs.readFileSync(filePath);
-        const imgEncoded = new Buffer(img).toString("base64");
+        const imgEncoded = "";
         res.status(200).json({ image: imgEncoded });
       }
     },

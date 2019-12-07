@@ -107,8 +107,8 @@ export default class Topics extends React.Component<ITopicsProps, ITopicsState> 
 						</thead>
 						<tbody>
 							{/*this.createMockTable(15).map((row) => row)*/}
-							{this.state.topics.map((topic: any) => (
-								<tr>
+							{this.state.topics.map((topic: any, index) => (
+								<tr key={index}>
 									<td>
 										<input type="checkbox" />
 									</td>

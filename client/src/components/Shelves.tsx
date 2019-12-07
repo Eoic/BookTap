@@ -33,22 +33,9 @@ export default class Shelves extends React.Component<IShelvesProps, IShelvesStat
 		console.log(this.state);
 	}
 
-	createMockList(itemCount: number) {
-		let list = [];
-
-		for (let i = 0; i < itemCount; i++) {
-			list.push(<Shelf title="Shelf title" books={["A", "B", "C", "B", "C", "B", "C", "B", "C", "B", "C", "B", "C", "B", "C", "B", "C"]} />)
-		}
-
-		return list;
-	}
-
 	public render() {
 		return (
 			<section>
-				
-				<hr />
-				{this.createMockList(5).map((shelf) => shelf)}
 			</section>
 		);
 	}
