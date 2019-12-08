@@ -91,14 +91,29 @@ const books = [
         return;
       }
 
-      const book = await getManager().findOne(Book, id);
+      const user = await getManager().findOne(User, (req.user as any).id);
+      const book = await getManager().findOne(Book, id, { where: { user } });
 
       if (typeof book === "undefined") {
         res.sendStatus(404);
         return;
       }
 
-      res.status(200).json(book);
+      if (user) {
+        const folder = `${user.id}-${user.username}`;
+        const extension = book.fsReference.substr(book.fsReference.length - 4);
+        const image = book.fsReference.replace(extension, "-0.png");
+        const filePath = path.join(__dirname, "../../", "uploads", folder, `${image}`);
+
+        // Encode image
+        const img = fs.readFileSync(filePath);
+        const imgEncoded = Buffer.from(img).toString("base64");
+        (book as any).cover = imgEncoded;
+        res.status(200).json(book);
+        return;
+      }
+
+      res.sendStatus(403);
     },
   },
 
@@ -207,9 +222,11 @@ const books = [
                 return;
               }
 
+              console.log(result);
+
               const bookInstance = getManager().create(Book, {
-                title: result.data[0].Title,
-                author: result.data[0].Author,
+                title: result.data[0].Title || "Unnamed",
+                author: result.data[0].Author || "Unnamed author",
                 status: BookStatus.NotStarted,
                 description: "",
                 favourite: false,
@@ -225,12 +242,15 @@ const books = [
                 res.status(201).json({
                   message: "Book was uploaded successfully.",
                 });
-              }).catch(() => {
+              }).catch((err: any) => {
+                console.log(err);
                 res.sendStatus(400);
               });
             })
             .then(() => ep.close())
-            .catch(console.error);
+            .catch((err: any) => {
+              console.log(err);
+            });
         });
       }
     },
@@ -339,7 +359,9 @@ const books = [
 
       if (book) {
         if (title) {
-          book.title = title.trim();
+          if (title.trim() !== "") {
+            book.title = title;
+          }
         }
 
         book.description = description;
@@ -353,6 +375,7 @@ const books = [
           return;
         }).catch(() => {
           res.sendStatus(400);
+          return;
         });
       } else {
         res.sendStatus(404);

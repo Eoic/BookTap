@@ -5,6 +5,8 @@ import { getShelfById, deleteShelf } from "../actions/ShelfActions";
 import Book from './Book';
 import uuid from 'uuid';
 import Stepper from './Stepper';
+import { openConfirmation } from '../actions/AppActions';
+import EditableField from './EditableField';
 
 export interface IShelfProps extends RouteComponentProps {
 
@@ -67,12 +69,20 @@ export default class Shelf extends React.Component<IShelfProps, IShelfState> {
 					<i className="fas fa-broom icon-fixed-width" />
 				</button>
 				&nbsp;
-				<button className="btn btn-red font-medium" onClick={() => deleteShelf(this.state.id)}>
+				<button className="btn btn-red font-medium"
+					onClick={() =>
+						openConfirmation(`Are you sure you want to delete shelf "${this.state.title}"?`,
+							"Books assigned to this shelf will not be deleted.", () => {
+								deleteShelf(this.state.id);
+								this.props.history.push("/library/unshelved");
+							})}>
 					<i className="fas fa-trash icon-fixed-width" />
 				</button>
 				<hr />
-				<h3> {this.state.title} </h3>
-				<p> {this.state.description || "No description"}</p>
+
+				<EditableField text={this.state.title} tag="h3" name="title" />
+				<EditableField text={this.state.description || "No description"} tag="p" name="description" />
+
 				<hr />
 				{this.state.books.map((book: any) => (
 					<Book key={uuid()} book={book} />

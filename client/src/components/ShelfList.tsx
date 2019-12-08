@@ -11,6 +11,7 @@ export interface IShelfListState {
     shelfTitle: string,
     shelfDescription: string,
     shelfList: [],
+    closeOnAction: boolean,
 }
 
 export default class ShelfList extends React.Component<IShelfListProps, IShelfListState> {
@@ -20,6 +21,7 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
             shelfTitle: "",
             shelfDescription: "",
             shelfList: shelfStore.getShelves(),
+            closeOnAction: false,
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,10 +37,13 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
 
     handleSubmit(event: React.FormEvent) {
         event.preventDefault();
-        addShelf({
-            title: this.state.shelfTitle,
-            description: this.state.shelfDescription,
-        });
+
+        if (this.state.shelfTitle.length > 0 && this.state.shelfTitle.length < 15) {
+            addShelf({
+                title: this.state.shelfTitle,
+                description: this.state.shelfDescription,
+            });
+        }
     }
 
     updateShelfList() {
@@ -68,10 +73,12 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
                     closeOnAction={false}
                     onCloseEvent={() => (this.setState({ shelfTitle: "", shelfDescription: "" }))}
                     title={"ADD NEW SHELF"}>
-                    <form id="add-shelf-form">
-                        <input className="input" required type="text" placeholder="Title" name="shelfTitle" onChange={this.handleChange} value={this.state.shelfTitle} />
-                        <textarea className="input" placeholder="Description" name="shelfDescription" onChange={this.handleChange} value={this.state.shelfDescription} />
-                    </form>
+                    <div>
+                        <form id="add-shelf-form">
+                            <input className="input" required type="text" placeholder="Title" name="shelfTitle" onChange={this.handleChange} value={this.state.shelfTitle} />
+                            <textarea className="input" placeholder="Description" name="shelfDescription" onChange={this.handleChange} value={this.state.shelfDescription} />
+                        </form>
+                    </div>
                     <hr />
                 </Modal>
                 <li>

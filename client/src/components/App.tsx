@@ -11,6 +11,8 @@ import AuthUtils from "../utilities/AuthUtils";
 import Logout from "./Logout";
 import Users from "./Users";
 import Profile from "./Profile";
+import Modal from "./Modal";
+import ConfirmationHandler from "./ConfirmationHandler";
 
 export interface IAppProps {
 }
@@ -34,17 +36,20 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
   public render() {
     return (
-      <BrowserRouter>
-        <Navigation isAuthenticated={this.state.isAuthenticated} />
-        <Route path="/" exact component={LandingPage} />
-        <Route path="/login" render={(props) => <Login {...props} updateAuthState={this.updateAuthState} />} />
-        <Route path="/register" render={(props) => <Register {...props} updateAuthState={this.updateAuthState} />} />
-        <Route path="/logout" render={(props) => <Logout {...props} updateAuthState={this.updateAuthState} />} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/password-reset" component={PasswordReset} />
-        <Route path="/library" component={Library} />
-        <Route path="/users" component={Users} />
-      </BrowserRouter>
+      <>
+        <BrowserRouter>
+          <Navigation isAuthenticated={this.state.isAuthenticated} />
+          <Route path="/" exact component={LandingPage} />
+          <Route path="/login" render={(props) => <Login {...props} updateAuthState={this.updateAuthState} />} />
+          <Route path="/register" render={(props) => <Register {...props} updateAuthState={this.updateAuthState} />} />
+          <Route path="/logout" render={(props) => <Logout {...props} updateAuthState={this.updateAuthState} />} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/password-reset" component={PasswordReset} />
+          <Route path="/library" component={Library} />
+          <Route path="/users" component={Users} />
+        </BrowserRouter>
+        <ConfirmationHandler />
+      </>
     );
   }
 }

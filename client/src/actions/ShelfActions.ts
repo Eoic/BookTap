@@ -1,7 +1,6 @@
 import axios from "axios";
 import dispatcher from "../utilities/Dispatcher";
 import AuthUtils from "../utilities/AuthUtils";
-import { response } from "express";
 
 const URL = {
     SHELVES: "/shelves"

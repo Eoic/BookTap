@@ -584,6 +584,10 @@ ul.menu-list > li > button {
 }
 
 /* Font */
+.font-large {
+  font-size: 21px;
+}
+
 .font-medium {
   font-size: 16px;
 }
@@ -633,7 +637,7 @@ ul.menu-list > li > button {
   @extend .btn;
   color: #858585;
   background-color: transparent;
-  font-size: 26px;
+  font-size: 26px !important;
   width: 45px;
 }
 
@@ -657,6 +661,14 @@ ul.menu-list > li > button {
 
 .mr-20 {
   margin-right: 20px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.my-15 {
+  margin: 15px 0px;
 }
 
 // Books list
@@ -728,6 +740,11 @@ ul.menu-list > li > button {
   width: 160px;
 }
 
+.book-cover-big {
+  width: auto;
+  height: 350px;
+}
+
 .favourite-mark {
   position: absolute;
   padding: 5px;
@@ -758,6 +775,50 @@ ul.menu-list > li > button {
     background-color: transparent;
     position: relative;
     top: -52px;
+  }
+}
+
+.book-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  background-color: #f8f8f8;
+  border: 1px solid #c7c7c7;
+  border-radius: 3px;
+
+  & > form input {
+    width: 360px;
+  }
+
+  & > form textarea {
+    width: 360px;
+    min-width: 360px;
+    max-width: 360px;
+  }
+}
+
+@include break-below(md) {
+  .book-info-grid {
+    grid-template-columns: 1fr;
+
+    & > form label {
+      width: auto !important;
+      float: inherit !important;
+    }
+
+    & > form input {
+      width: 100%;
+    }
+
+    & > form textarea {
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      display: block;
+    }
+
+    .hide-on-collapse {
+      display: none;
+    }
   }
 }
 // ---
@@ -915,6 +976,17 @@ input[type="file"] {
     padding: 5px;
     font-size: 15px;
     width: 300px;
+  }
+
+  & > textarea {
+    @extend .input;
+    display: inline-block;
+    width: auto;
+    padding: 5px;
+    font-size: 15px;
+    width: 300px;
+    max-width: 300px;
+    min-width: 300px;
   }
 
   & > label {

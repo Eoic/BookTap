@@ -4,6 +4,7 @@ import * as BookActions from "../actions/BookActions";
 
 export const STORE_EVENTS = {
     UPDATED: "StoreEvents.Updated",
+    UPDATED_BY_ID: "StoreEvents.UpdatedById",
     UPDATE_REQUIRED: "StoreEvents.UpdateRequired",
     UPLOAD_SUCCESSFUL: "StoreEvents.UploadSuccessful",
     UPLOAD_FAILED: "StoreEvents.UploadFailed",
@@ -11,10 +12,12 @@ export const STORE_EVENTS = {
 
 class BookStore extends EventEmitter {
     books: [];
+    bookById: {};
 
     constructor() {
         super();
         this.books = [];
+        this.bookById = {};
     }
 
     handleActions(action: unknown) {
@@ -38,11 +41,20 @@ class BookStore extends EventEmitter {
                     this.emit(STORE_EVENTS.UPDATE_REQUIRED);
                 } else this.emit(STORE_EVENTS.UPLOAD_FAILED);
             }
+
+            case BookActions.BOOK_ACTIONS.GET_BOOK_BY_ID: {
+                this.bookById = typedAction.value;
+                this.emit(STORE_EVENTS.UPDATED_BY_ID);
+            }
         }
     }
 
     getBooks() {
         return this.books;
+    }
+
+    getBookById() {
+        return this.bookById;
     }
 }
 

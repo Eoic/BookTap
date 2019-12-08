@@ -27,6 +27,7 @@ export default class SidebarSection extends React.Component<ISidebarSectionProps
                     <i className={iconLeft}></i>
                     {text}
                     <i className={`fas fa-angle-${(this.state.isOpen) ? "right" : "down" } fl-right`} style={{ lineHeight: 1.3 }}></i>
+                    <div className="clearfix" />
                 </button>
                 <ul className="menu-list pl-20" style={{ display: `${(this.state.isOpen) ? "block" : "none"}`} }>
                     {this.props.children}

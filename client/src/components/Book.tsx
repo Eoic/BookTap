@@ -52,7 +52,7 @@ export default class Book extends React.Component<IBookProps, IBookState> {
 						<i className="fas fa-ellipsis-v" />
 					</button>
 					<div className="clearfix" />
-					<SubMenu isOpen={this.state.isMenuOpen} setMenuHoverState={this.setMenuHoverState} hideMenu={this.hideMenu} id={this.props.book.id} filename={this.props.book.originalFilename} />
+					<SubMenu isOpen={this.state.isMenuOpen} title={this.props.book.title} setMenuHoverState={this.setMenuHoverState} hideMenu={this.hideMenu} id={this.props.book.id} filename={this.props.book.originalFilename} />
 				</div>
 			</div>
 		);

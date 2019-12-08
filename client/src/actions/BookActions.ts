@@ -15,6 +15,7 @@ const getConfig = () => {
 
 export const BOOK_ACTIONS = {
     GET_BOOKS: 'BookActions.GetBooks',
+    GET_BOOK_BY_ID: "BookActions.GetBookById",
     UPLOAD_BOOK: 'BookActions.UploadBook',
     UPDATE_BOOK: 'BookActions.UpdateBook',
     DELETE_BOOK: 'BookActions.DeleteBook',
@@ -32,6 +33,15 @@ export const getBooks = () => {
         });
     }).catch((err) => {
         console.log(err);
+    });
+}
+
+export const getBookById = (id: number) => {
+    axios.get(`${URL.BOOKS}/${id}`, getConfig()).then((response) => {
+        dispatcher.dispatch({
+            type: BOOK_ACTIONS.GET_BOOK_BY_ID,
+            value: response.data,
+        })
     });
 }
 
@@ -88,6 +98,12 @@ export const downloadBook = (id: number, filename: string) => {
         FileDownload(response.data, filename);
     }).catch((err) => {
         console.log(err);
+    });
+}
+
+export const updateBook = (values: any) => {
+    axios.patch(`${URL.BOOKS}/${values.id}`, values, getConfig()).then((response) => {
+        console.log(response);
     });
 }
 
