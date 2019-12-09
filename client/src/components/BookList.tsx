@@ -58,7 +58,6 @@ export default class BookList extends React.Component<IBookListProps, IBookListS
 				</section>
 				<hr className="divider" />
 				<Stepper size={50} />
-				<ShelfAdder />
 			</>
 		);
 	}

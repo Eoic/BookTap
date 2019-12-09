@@ -973,6 +973,30 @@ input[type="file"] {
   padding-top: $navbar-height;
 }
 
+// Users
+.table-section {
+  padding: $navbar-height + 2rem;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.badge {
+  border-radius: 10px;
+  padding: 0px 10px;
+  font-size: 14px;
+  color: rgb(255, 255, 255);
+}
+
+.badge-green {
+  @extend .badge;
+  background-color: #44bb72;
+}
+
+.badge-blue {
+  @extend .badge;
+  background-color: #1422a3;
+}
+
 .profile {
   @extend .padding-from-nav;
   padding-left: 20px;

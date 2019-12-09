@@ -78,6 +78,38 @@ const books = [
     },
   },
 
+  {
+    path: "/books/unshelved",
+    method: METHOD_TYPE.GET,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const user = await getManager().findOne(User, (req.user as any).id);
+      const bookList = await getManager().find(Book, {
+        where: { user, shelf: null },
+      });
+
+      if (user) {
+        const folder = `${user.id}-${user.username}`;
+
+        bookList.forEach((book: any) => {
+          const extension = book.fsReference.substr(book.fsReference.length - 4);
+          const image = book.fsReference.replace(extension, "-0.png");
+          const filePath = path.join(__dirname, "../../", "uploads", folder, `${image}`);
+
+          // Encode image
+          const img = fs.readFileSync(filePath);
+          const imgEncoded = Buffer.from(img).toString("base64");
+          book.cover = imgEncoded;
+        });
+
+        res.status(200).json(bookList);
+        return;
+      }
+
+      res.sendStatus(403);
+    },
+  },
+
   /**
    * Get book by id [CRUD(get)][DONE]
    */

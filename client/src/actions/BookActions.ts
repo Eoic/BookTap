@@ -24,6 +24,7 @@ export const BOOK_ACTIONS = {
     ASSIGN_TOPIC: "BookActions.AssignTopic",
     GET_COVER: "BookActions.GetCover",
     ADD_TO_SHELF: "BookActions.AddToShelf",
+    GET_BOOKS_UNSHELVED: "BookActions.GetBooksUnshelved",
 }
 
 export const getBooks = () => {
@@ -122,6 +123,16 @@ export const openShelfAdder = (bookId: number, shelfId: number) => {
 export const addToShelf = (bookId: number, shelfId: number) => {
     axios.patch(`${URL.BOOKS}/${bookId}/shelf/${shelfId}`, {}, getConfig()).then((response) => {
         console.log(response);
+    });
+}
+
+export const getBooksUnshelved = () => {
+    axios.get(`${URL.BOOKS}/unshelved`, getConfig()).then((response) => {
+        console.log(response.data);
+        dispatcher.dispatch({
+            type: BOOK_ACTIONS.GET_BOOKS_UNSHELVED,
+            value: response.data,
+        })
     });
 }
 

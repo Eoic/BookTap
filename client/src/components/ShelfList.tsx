@@ -5,6 +5,8 @@ import { getShelves, addShelf } from "../actions/ShelfActions";
 import { SidebarItem } from './Library';
 
 export interface IShelfListProps {
+    setLinkActive: (path: string) => void,
+    path: string,
 }
 
 export interface IShelfListState {
@@ -95,7 +97,7 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
                             icon={"caret-right"}
                             path={`shelf/${(shelf as any).id}`}
                             isActive={false}
-                            onClick={() => { }} />
+                            onClick={() => { this.props.setLinkActive(this.props.path) }} />
                     </li>
                 ))}
             </>

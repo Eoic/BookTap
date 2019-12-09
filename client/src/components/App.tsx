@@ -12,6 +12,7 @@ import Logout from "./Logout";
 import Users from "./Users";
 import Profile from "./Profile";
 import ConfirmationHandler from "./ConfirmationHandler";
+import ShelfAdder from "./ShelfAdder";
 
 export interface IAppProps {
 }
@@ -48,6 +49,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
           <Route path="/users" component={Users} />
         </BrowserRouter>
         <ConfirmationHandler />
+        <ShelfAdder />
       </>
     );
   }

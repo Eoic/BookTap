@@ -13,6 +13,7 @@ import ShelfList from './ShelfList';
 import Topic from './Topic';
 import Shelf from './Shelf';
 import BookInfo from './BookInfo';
+import Unshelved from './Unshelved';
 
 const links = {
 	browse: [
@@ -132,7 +133,7 @@ class Library extends React.Component<ILibraryProps, ILibraryState> {
 								iconLeft: "fas fa-layer-group icon-fixed-width",
 								style: "btn btn-sidebar btn-fluid text-left"
 							}}>
-								<ShelfList />
+								{<ShelfList setLinkActive={this.setActive} path={this.props.history.location.pathname} />}
 							</SidebarSection>
 						</li>
 					</ul>
@@ -158,6 +159,7 @@ class Library extends React.Component<ILibraryProps, ILibraryState> {
 					<Route path="/library/topic/:id" component={Topic} />
 					<Route path="/library/all-books/:id" render={(props) => <BookInfo {...props} />} />
 					<Route path="/library/shelf/:id" render={(props) => <Shelf {...props} />} />
+					<Route path="/library/unshelved" render={(props) => <Unshelved {...props} />} />
 					<Route path="/library/reading-summary" component={ReadingSummary} />
 					<Route path="/library/reading-in-progress" component={ReadingInProgress} />
 					<Route path="/library/reading-finished" component={ReadingFinished} />

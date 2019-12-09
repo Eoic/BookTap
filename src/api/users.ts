@@ -21,7 +21,8 @@ const users = [
                 return;
             }
 
-            const userList = await getManager().find(User, { select: ["id", "username", "email", "createdAt", "updatedAt"] });
+            // tslint:disable-next-line: max-line-length
+            const userList = await getManager().find(User, { select: ["id", "username", "email", "userType", "createdAt", "updatedAt"] });
             res.status(200).json(userList);
         },
     },

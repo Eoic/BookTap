@@ -24,6 +24,7 @@ const shelves = [
       entityManager.findOne(User, (req.user as any).id).then((result) => {
         entityManager.find(Shelf, {
           where: { user: result },
+          relations: ["topic"],
         }).then((shelvesList) => {
           res.status(200).json({ shelves: shelvesList });
         });

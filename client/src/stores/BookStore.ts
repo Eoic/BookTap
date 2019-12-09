@@ -13,11 +13,13 @@ export const STORE_EVENTS = {
 
 class BookStore extends EventEmitter {
     books: [];
+    unshelved: [];
     bookById: {};
 
     constructor() {
         super();
         this.books = [];
+        this.unshelved = [];
         this.bookById = {};
     }
 
@@ -54,11 +56,20 @@ class BookStore extends EventEmitter {
                 this.emit(STORE_EVENTS.ADD_SHELF_READY, typedAction.value);
                 break;
             }
+
+            case BookActions.BOOK_ACTIONS.GET_BOOKS_UNSHELVED: {
+                this.unshelved = typedAction.value;
+                this.emit(STORE_EVENTS.UPDATED);
+            }
         }
     }
 
     getBooks() {
         return this.books;
+    }
+
+    getBooksUnshelved() {
+        return this.unshelved;
     }
 
     getBookById() {

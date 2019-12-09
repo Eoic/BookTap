@@ -78,7 +78,18 @@ export default class Topics extends React.Component<ITopicsProps, ITopicsState> 
 	}
 
 	updateShelves() {
-		this.setState({ shelves: shelfStore.getShelves() })
+		const shelves = shelfStore.getShelves();
+		const selectedShelves = this.state.selectedShelves;
+
+		shelves.forEach((shelf: any) => {
+			if (shelf.topic) {
+				if (shelf.topic.id === this.state.id) {
+					selectedShelves.set(String(shelf.id), true);
+				}
+			}
+		});
+
+		this.setState({ shelves, selectedShelves });
 	}
 
 	handleChange(event: any) {
