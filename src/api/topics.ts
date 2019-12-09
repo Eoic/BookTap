@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { check } from "express-validator";
-import { getManager } from "typeorm";
+import { getConnection, getManager } from "typeorm";
+import { Shelf } from "../models/Shelf";
 import { Topic } from "../models/Topic";
 import { User } from "../models/User";
 import { topicLimits } from "../validation/limits";
@@ -127,6 +128,44 @@ const topics = [
       } else {
         res.sendStatus(404);
       }
+    },
+  },
+
+  {
+    path: "/topics/:id/shelves",
+    method: METHOD_TYPE.PATCH,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const entityManager = getManager();
+      const topicId = Number(req.params.id);
+      const user = await entityManager.findOne(User, (req.user as any).id);
+
+      const topic = await entityManager.findOne(Topic, {
+        where: { user, id: topicId },
+      });
+
+      if (topic) {
+        const shelvesList: number[] = req.body.shelves;
+
+        for (let i = 0; i < shelvesList.length; i++) {
+          shelvesList[i] = Number(shelvesList[i]);
+        }
+
+        await entityManager.update(Shelf, { user, topic }, { topic: null });
+
+        if (shelvesList.length > 0) {
+          await getConnection().createQueryBuilder()
+            .update(Shelf)
+            .set({ topic })
+            .where("id IN (:...shelves)", { shelves: shelvesList })
+            .execute();
+        }
+
+        res.sendStatus(200);
+        return;
+      }
+
+      res.sendStatus(404);
     },
   },
 

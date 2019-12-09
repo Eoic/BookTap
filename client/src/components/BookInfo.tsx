@@ -29,8 +29,9 @@ const fieldKeys: string[] = [
 export default class BookInfo extends React.Component<RouteComponentProps<{}> & IBookInfoProps, IBookInfoState> {
     constructor(props: RouteComponentProps<{}> & IBookInfoProps) {
         const cachedBook: any = bookStore.getBookById();
-
+        console.log(cachedBook);
         super(props);
+
         this.state = {
             book: cachedBook,
             title: cachedBook.title || "",

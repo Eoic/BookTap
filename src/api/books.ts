@@ -3,7 +3,6 @@ import exiftoolBin from "dist-exiftool";
 import epubParser from "epub-metadata-parser";
 import { Request, Response, response } from "express";
 import fs from "fs";
-import gm from "gm";
 import multer from "multer";
 import exiftool from "node-exiftool";
 import path from "path";
@@ -55,7 +54,10 @@ const books = [
     auth: verifyToken,
     handler: async (req: Request, res: Response) => {
       const user = await getManager().findOne(User, (req.user as any).id);
-      const bookList = await getManager().find(Book, { where: { user } });
+      const bookList = await getManager().find(Book, {
+        where: { user },
+        relations: ["shelf"],
+      });
 
       if (user) {
         const folder = `${user.id}-${user.username}`;
@@ -467,6 +469,7 @@ const books = [
     method: METHOD_TYPE.PATCH,
     auth: verifyToken,
     handler: async (req: Request, res: Response) => {
+      console.log("RECEIVED");
       const entityManager = getManager();
       const bookId = Number(req.params.bookId);
       const shelfId = Number(req.params.shelfId);

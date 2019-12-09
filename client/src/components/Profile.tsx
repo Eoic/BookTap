@@ -47,7 +47,7 @@ export default class Profile extends React.Component<IProfileProps, IProfileStat
                 </form>
                 <button form="profile-update" className="btn btn-green font-medium"> Update profile </button>
 
-                <hr />
+                <hr className="divider" />
                 <h3> Change password </h3>
                 <form className="form" id="password-update">
                     <div className="form-input">
@@ -62,10 +62,10 @@ export default class Profile extends React.Component<IProfileProps, IProfileStat
 
                 <button form="password-update" className="btn btn-green font-medium"> Change password </button>
 
-                <hr />
+                <hr className="divider" />
                 <h3> Other actions </h3>
                 <button className="btn btn-red font-medium"> Delete account </button>
-                <hr />
+                <hr className="divider" />
             </section>
         );
     }

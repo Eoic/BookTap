@@ -11,7 +11,6 @@ import AuthUtils from "../utilities/AuthUtils";
 import Logout from "./Logout";
 import Users from "./Users";
 import Profile from "./Profile";
-import Modal from "./Modal";
 import ConfirmationHandler from "./ConfirmationHandler";
 
 export interface IAppProps {

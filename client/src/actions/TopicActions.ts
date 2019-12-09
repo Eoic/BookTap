@@ -1,6 +1,7 @@
 import axios from "axios";
 import dispatcher from "../utilities/Dispatcher";
 import AuthUtils from "../utilities/AuthUtils";
+import { response } from "express";
 
 const URL = {
     TOPICS: "/topics"
@@ -15,6 +16,8 @@ const getConfig = () => {
 export const TOPIC_ACTIONS = {
     GET_TOPICS: 'TopicActions.GetTopics',
     ADD_TOPIC: 'TopicActions.AddTopic',
+    DELETE_TOPIC: 'TopicActions.DeleteTopic',
+    EDIT_TOPIC: 'TopicActions.EditTopic',
 }
 
 export function getTopics() {
@@ -31,6 +34,33 @@ export function addTopic(data: { title: string, description: string }) {
         dispatcher.dispatch({
             type: TOPIC_ACTIONS.ADD_TOPIC,
             value: response.data,
+        });
+    });
+}
+
+export function deleteTopic(id: number) {
+    axios.delete(`${URL.TOPICS}/${id}`, getConfig()).then((response) => {
+        dispatcher.dispatch({
+            type: TOPIC_ACTIONS.DELETE_TOPIC,
+            value: response.data,
+        });
+    });
+}
+
+export function editTopic(id: number, title: string, description: string, selectedShelves: Map<string, boolean>) {
+    axios.patch(`${URL.TOPICS}/${id}`, { title, description }, getConfig()).then((response) => {
+        let selected: any[] = [];
+
+        selectedShelves.forEach((value, key) => {
+            if (value === true)
+                selected.push(key);
+        });
+
+        axios.patch(`${URL.TOPICS}/${id}/shelves`, { shelves: selected }, getConfig()).then((response) => {
+            dispatcher.dispatch({
+                type: TOPIC_ACTIONS.EDIT_TOPIC,
+                value: response.data,
+            });
         });
     });
 }

@@ -32,6 +32,7 @@ class AppStore extends EventEmitter {
             }
             case AppActions.APP_ACTIONS.CLOSE_CONFIRMATION_MODAL: {
                 this.emit(STORE_EVENTS.CONFIRMATION_DONE);
+                break;
             }
         }
     }

@@ -28,6 +28,14 @@ class TopicStore extends EventEmitter {
                 this.emit(STORE_EVENTS.UPDATE_REQUIRED);
                 break;
             }
+            case TopicActions.TOPIC_ACTIONS.DELETE_TOPIC: {
+                this.emit(STORE_EVENTS.UPDATE_REQUIRED);
+                break;
+            }
+            case TopicActions.TOPIC_ACTIONS.EDIT_TOPIC: {
+                this.emit(STORE_EVENTS.UPDATE_REQUIRED);
+                break;
+            }
         }
     }
 

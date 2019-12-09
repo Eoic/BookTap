@@ -24,7 +24,7 @@ export class Topic extends BaseEntity {
     public updatedAt!: Date;
 
     @OneToMany(() => Shelf, (shelf) => (shelf as any).topic)
-    public shelves!: Shelf[];
+    public shelves!: Shelf[] | null;
 
     @ManyToOne(() => User, (user) => (user as any).topics, { onDelete: "CASCADE" })
     public user!: User;

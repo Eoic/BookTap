@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
+import fs from "fs";
+import path from "path";
 import { getManager } from "typeorm";
-import { Book } from "../models/Book";
 import { Shelf } from "../models/Shelf";
 import { Topic } from "../models/Topic";
 import { User } from "../models/User";
 import { shelfLimits } from "../validation/limits";
 import { validationResultParser } from "../validation/validationResultParser";
 import { METHOD_TYPE } from "./helpers/methodTypes";
-import { mockData } from "./helpers/mockData";
 import { verifyToken } from "./helpers/routeGuard";
 
 const shelves = [
@@ -52,7 +52,20 @@ const shelves = [
         relations: ["books"],
       });
 
-      if (shelfBooks) {
+      if (shelfBooks && user) {
+        const folder = `${user.id}-${user.username}`;
+
+        shelfBooks.books.forEach((book: any) => {
+          const extension = book.fsReference.substr(book.fsReference.length - 4);
+          const image = book.fsReference.replace(extension, "-0.png");
+          const filePath = path.join(__dirname, "../../", "uploads", folder, `${image}`);
+
+          // Encode image
+          const img = fs.readFileSync(filePath);
+          const imgEncoded = Buffer.from(img).toString("base64");
+          book.cover = imgEncoded;
+        });
+
         res.status(200).json({ shelf: shelfBooks });
       } else {
         res.sendStatus(404);

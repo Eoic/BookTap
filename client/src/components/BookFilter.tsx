@@ -20,7 +20,7 @@ export default class BookFilter extends React.Component<IBookFilterProps> {
 					<i className="fas fa-filter icon-fixed-width" />
 					Apply
         		</button>
-				<hr />
+				<hr className="divider" />
 			</>
 		);
 	}

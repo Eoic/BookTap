@@ -8,6 +8,7 @@ export const STORE_EVENTS = {
     UPDATE_REQUIRED: "StoreEvents.UpdateRequired",
     UPLOAD_SUCCESSFUL: "StoreEvents.UploadSuccessful",
     UPLOAD_FAILED: "StoreEvents.UploadFailed",
+    ADD_SHELF_READY: "StoreEvents.AddShelfReady",
 }
 
 class BookStore extends EventEmitter {
@@ -40,11 +41,18 @@ class BookStore extends EventEmitter {
                     this.emit(STORE_EVENTS.UPLOAD_SUCCESSFUL);
                     this.emit(STORE_EVENTS.UPDATE_REQUIRED);
                 } else this.emit(STORE_EVENTS.UPLOAD_FAILED);
+                break;
             }
 
             case BookActions.BOOK_ACTIONS.GET_BOOK_BY_ID: {
                 this.bookById = typedAction.value;
                 this.emit(STORE_EVENTS.UPDATED_BY_ID);
+                break;
+            }
+
+            case BookActions.BOOK_ACTIONS.ADD_TO_SHELF: {
+                this.emit(STORE_EVENTS.ADD_SHELF_READY, typedAction.value);
+                break;
             }
         }
     }

@@ -36,7 +36,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             <>
                 {(this.state.isOpen || ((typeof (this.props.externalState)) !== "undefined" ? this.props.externalState : this.state.isOpen)) && <div className="modal-cover">
                     <div className="modal modal-small">
-                        <div className="modal-header">
+                        <div className="modal-header border-bottom">
                             <h4 style={{ display: "inline", float: "left", margin: 0, paddingLeft: 15, paddingTop: 12 }}> {this.props.title} </h4>
                             <button className="modal-btn" onClick={this.close}>
                                 <i className="fas fa-times" />
@@ -44,10 +44,11 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                             <div className="clearfix" />
                         </div>
                         <div className="modal-body">
-                            <hr style={{ marginTop: -5 }} />
                             {this.props.children}
-                            <div onClick={() => (this.props.closeOnAction) && this.close()} style={{ display: "inline" }}>
-                                {this.props.action || undefined}
+                            <div className="modal-footer">
+                                <div onClick={() => (this.props.closeOnAction) && this.close()} style={{ display: "inline" }}>
+                                    {this.props.action || undefined}
+                                </div>
                             </div>
                         </div>
                     </div>

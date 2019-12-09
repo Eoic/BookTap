@@ -160,7 +160,7 @@ export default class UploadModal extends React.Component<IUploadModalProps, IUpl
                         </div>}
                     </div>
                 </Modal>
-                <hr />
+                <hr className="divider" />
             </>
         );
     }

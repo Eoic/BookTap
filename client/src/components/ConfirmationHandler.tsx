@@ -54,13 +54,12 @@ export default class ConfirmationHandler extends React.Component<IConfirmationHa
         return (
             <Modal title={this.state.title} closeOnAction={true} onCloseEvent={closeConfirmation} externalState={this.state.isOpen} action={
                 <>
-                    <button className="btn btn-red font-medium"> Cancel </button>
+                    <button className="btn btn-green font-medium"> Cancel </button>
                     &nbsp;
-                    <button className="btn btn-green font-medium" onClick={() => { this.state.action(); this.setState({ isOpen: false }); }}> Confirm </button>
+                    <button className="btn btn-red font-medium" onClick={() => { this.state.action(); this.setState({ isOpen: false }); }}> Confirm </button>
                 </>
             }>
                 <p> {this.state.message} </p>
-                <hr/>
             </Modal>
         );
     }

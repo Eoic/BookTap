@@ -17,12 +17,14 @@ export interface IShelfListState {
 export default class ShelfList extends React.Component<IShelfListProps, IShelfListState> {
     constructor(props: IShelfListProps) {
         super(props);
+
         this.state = {
             shelfTitle: "",
             shelfDescription: "",
             shelfList: shelfStore.getShelves(),
             closeOnAction: false,
         }
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updateShelfList = this.updateShelfList.bind(this);
@@ -69,7 +71,7 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
         return (
             <>
                 <Modal trigger={{ style: "btn btn-blue add-shelf-btn", icon: "plus", text: "ADD SHELF" }}
-                    action={<button className="btn btn-blue font-medium" type="submit" onClick={this.handleSubmit} form="add-shelf-form"> CREATE </button>}
+                    action={<button className="btn btn-green font-medium" type="submit" onClick={this.handleSubmit} form="add-shelf-form"> CREATE </button>}
                     closeOnAction={false}
                     onCloseEvent={() => (this.setState({ shelfTitle: "", shelfDescription: "" }))}
                     title={"ADD NEW SHELF"}>
@@ -79,7 +81,6 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
                             <textarea className="input" placeholder="Description" name="shelfDescription" onChange={this.handleChange} value={this.state.shelfDescription} />
                         </form>
                     </div>
-                    <hr />
                 </Modal>
                 <li>
                     <SidebarItem text={"Not in shelves"}

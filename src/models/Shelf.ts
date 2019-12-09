@@ -25,8 +25,8 @@ export class Shelf extends BaseEntity {
     public updatedAt!: Date;
 
     // Relations
-    @ManyToOne(() => Topic, (topic) => (topic as any).shelves, { onDelete: "SET NULL" })
-    public topic!: Topic;
+    @ManyToOne(() => Topic, (topic) => (topic as any).shelves, { onDelete: "SET NULL", nullable: true })
+    public topic!: Topic | null;
 
     @ManyToOne(() => User, (user) => (user as any).shelves, { onDelete: "CASCADE" })
     public user!: User;

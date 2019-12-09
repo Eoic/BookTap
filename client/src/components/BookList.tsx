@@ -6,6 +6,7 @@ import Book from './Book';
 import { bookStore, STORE_EVENTS } from "../stores/BookStore";
 import { getBooks } from "../actions/BookActions";
 import uuid from 'uuid/v4';
+import ShelfAdder from "./ShelfAdder";
 
 export interface IBookListProps {
 }
@@ -55,8 +56,9 @@ export default class BookList extends React.Component<IBookListProps, IBookListS
 						<h4 className="color-gray"> No books uploaded yet... </h4>
 					</div>}
 				</section>
-				<hr />
+				<hr className="divider" />
 				<Stepper size={50} />
+				<ShelfAdder />
 			</>
 		);
 	}

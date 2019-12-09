@@ -36,9 +36,11 @@ class ShelfStore extends EventEmitter {
             case ShelfActions.SHELF_ACTIONS.GET_SHELF_BY_ID: {
                 this.shelfById = typedAction.value;
                 this.emit(STORE_EVENTS.UPDATED_BY_ID);
+                break;
             }
             case ShelfActions.SHELF_ACTIONS.DELETE_SHELF: {
                 this.emit(STORE_EVENTS.UPDATE_REQUIRED);
+                break;
             }
         }
     }

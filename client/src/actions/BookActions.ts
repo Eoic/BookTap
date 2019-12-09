@@ -23,6 +23,7 @@ export const BOOK_ACTIONS = {
     ASSIGN_SHELF: "BookActions.AssignShelf",
     ASSIGN_TOPIC: "BookActions.AssignTopic",
     GET_COVER: "BookActions.GetCover",
+    ADD_TO_SHELF: "BookActions.AddToShelf",
 }
 
 export const getBooks = () => {
@@ -103,6 +104,23 @@ export const downloadBook = (id: number, filename: string) => {
 
 export const updateBook = (values: any) => {
     axios.patch(`${URL.BOOKS}/${values.id}`, values, getConfig()).then((response) => {
+        console.log(response);
+    });
+}
+
+export const openShelfAdder = (bookId: number, shelfId: number) => {
+    console.log("CALLED SHELF ADDER");
+    
+    if (bookId && shelfId) {
+        dispatcher.dispatch({
+            type: BOOK_ACTIONS.ADD_TO_SHELF,
+            value: { bookId, shelfId },
+        });
+    }
+}
+
+export const addToShelf = (bookId: number, shelfId: number) => {
+    axios.patch(`${URL.BOOKS}/${bookId}/shelf/${shelfId}`, {}, getConfig()).then((response) => {
         console.log(response);
     });
 }
