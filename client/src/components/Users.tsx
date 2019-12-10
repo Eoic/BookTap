@@ -97,7 +97,7 @@ class Users extends React.Component<IUsersProps, IUsersState> {
 
 	handleDelete(id: number, username: string) {
 		openConfirmation("Are you sure?", `Delete user "${username}"?`, () => {
-			deleteUser(id);
+			deleteUser(id, username);
 		});
 	}
 

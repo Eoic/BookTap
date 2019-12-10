@@ -21,7 +21,7 @@ export default class Topic extends React.Component<ITopicProps, ITopicState> {
 
 	handleDelete() {
 		openConfirmation(`Delete topic "${this.props.topic.title}"?`, "Shelves assigned to this topic will not be deleted", () => {
-			deleteTopic(this.props.topic.id);
+			deleteTopic(this.props.topic.id, this.props.topic.title);
 		});
 	}
 

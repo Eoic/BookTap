@@ -28,7 +28,7 @@ export default class SubMenu extends React.Component<ISubMenuProps> {
 
     deleteBook() {
         openConfirmation("Are you sure?", `You are about to delete book "${this.props.title}".`, () => {
-            deleteBook(this.props.id);
+            deleteBook(this.props.id, this.props.title);
         });
         this.props.hideMenu();
     }

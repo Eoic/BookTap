@@ -2,6 +2,7 @@ import axios from "axios";
 import dispatcher from "../utilities/Dispatcher";
 import AuthUtils from "../utilities/AuthUtils";
 import { response } from "express";
+import { toast } from "react-toastify";
 
 const URL = {
     SHELVES: "/shelves"
@@ -31,6 +32,7 @@ export function getShelves() {
 
 export function addShelf(data: { title: string, description: string }) {
     axios.post(URL.SHELVES, data, getConfig()).then((response) => {
+        toast.success(`Created new shelf "${data.title}"`);
         dispatcher.dispatch({
             type: SHELF_ACTIONS.ADD_SHELF,
             value: response.data,
@@ -49,6 +51,7 @@ export function getShelfById(id: number) {
 
 export function deleteShelf(id: number) {
     axios.delete(`${URL.SHELVES}/${id}`, getConfig()).then((response) => {
+        toast.success("Shelf was deleted successfully");
         dispatcher.dispatch({
             type: SHELF_ACTIONS.DELETE_SHELF,
             value: response.data,

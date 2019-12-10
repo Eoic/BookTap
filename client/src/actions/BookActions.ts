@@ -4,6 +4,7 @@ import AuthUtils from "../utilities/AuthUtils";
 import FileDownload from "js-file-download";
 import { SHELF_ACTIONS } from "./ShelfActions";
 import { response } from "express";
+import { toast } from 'react-toastify';
 
 const URL = {
     BOOKS: "/books"
@@ -52,8 +53,9 @@ export const getBookById = (id: number) => {
     });
 }
 
-export const deleteBook = (id: number) => {
+export const deleteBook = (id: number, topic: string) => {
     axios.delete(`${URL.BOOKS}/${id}`, getConfig()).then(() => {
+        toast.success(`Deleted book "${topic}"`)
         dispatcher.dispatch({
             type: BOOK_ACTIONS.DELETE_BOOK,
         });
@@ -117,8 +119,13 @@ export const downloadBook = (id: number, filename: string) => {
 }
 
 export const updateBook = (values: any) => {
+    if (values.title.length === 0) {
+        toast.error("Book title cannot be empty");
+        return;
+    }
+
     axios.patch(`${URL.BOOKS}/${values.id}`, values, getConfig()).then((response) => {
-        console.log(response);
+        toast.success("Book info was sucessfully updated");
     });
 }
 
@@ -133,6 +140,7 @@ export const openShelfAdder = (bookId: number, shelfId: number) => {
 
 export const addToShelf = (bookId: number, shelfId: number) => {
     axios.patch(`${URL.BOOKS}/${bookId}/shelf/${shelfId}`, {}, getConfig()).then((response) => {
+        toast.success("Book was added to shelf successfully")
         dispatcher.dispatch({
             type: BOOK_ACTIONS.ASSIGN_SHELF,
             value: response.data,
@@ -158,6 +166,9 @@ export const openStatusSelector = (data: any) => {
 
 export const setStatus = (id: number, status: number) => {
     axios.patch(`${URL.BOOKS}/${id}/status`, { status }, getConfig()).then((response) => {
+        let statusText = (status == 0) ? "Not started" : (status == 1) ? "In progress" : "Done"; 
+        toast.success(`Book reading status changed to "${statusText}"`);
+
         dispatcher.dispatch({
             type: BOOK_ACTIONS.SET_STATUS,
             value: response.data,

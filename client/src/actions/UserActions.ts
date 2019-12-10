@@ -2,6 +2,7 @@ import axios from "axios";
 import dispatcher from "../utilities/Dispatcher";
 import AuthUtils from "../utilities/AuthUtils";
 import { response } from "express";
+import { toast } from "react-toastify";
 
 const URL = {
     USERS: "/users"
@@ -34,8 +35,9 @@ export const getUsers = () => {
     });
 }
 
-export const deleteUser = (id: number) => {
+export const deleteUser = (id: number, username: string) => {
     axios.delete(`${URL.USERS}/${id}`, getConfig()).then((response) => {
+        toast.success(`Deleted user "${username}"`)
         dispatcher.dispatch({
             type: USER_ACTIONS.DELETE_USER,
             value: response.data,
@@ -45,6 +47,7 @@ export const deleteUser = (id: number) => {
 
 export const changeRole = (id: number, userType: number) => {
     axios.patch(`${URL.USERS}/${id}/role`, { userType }, getConfig()).then((response) => {
+        toast.success("User updated successfully");
         dispatcher.dispatch({
             type: USER_ACTIONS.CHANGE_TYPE,
             value: response.data,
@@ -54,6 +57,7 @@ export const changeRole = (id: number, userType: number) => {
 
 export const createUser = (data: any) => {
     axios.post('/register', data, getConfig()).then((response) => {
+        toast.success(`Successfully added new user "${data.username}"`)
         dispatcher.dispatch({
             type: USER_ACTIONS.CREATE_USER_SUCCESS,
             value: response.data,

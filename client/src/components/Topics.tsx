@@ -8,6 +8,7 @@ import Topic from './Topic';
 import uuid from 'uuid';
 import ListSelector from './ListSelector';
 import Stepper from './Stepper';
+import { toast } from 'react-toastify';
 
 export interface ITopicsProps {
 }
@@ -140,6 +141,8 @@ export default class Topics extends React.Component<ITopicsProps, ITopicsState> 
 		if (this.state.title.trim().length > 0 && this.state.id >= 0) {
 			editTopic(this.state.id, this.state.title, this.state.description, this.state.selectedShelves);
 			this.setState({ editing: false, title: "", description: "", selectedShelves: new Map<string, boolean>() });
+		} else {
+			toast.error("Topic title cannot be empty!");
 		}
 	}
 
