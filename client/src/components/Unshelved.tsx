@@ -21,26 +21,33 @@ export default class Unshelved extends React.Component<IUnshelvedProps, IUnshelv
 		}
 
 		this.updateBookList = this.updateBookList.bind(this);
+		this.requestBookList = this.requestBookList.bind(this);
 	}
 
 	updateBookList() {
-		this.setState({
-			books: bookStore.getBooksUnshelved(),
-		});
+		this.setState({ books: bookStore.getBooksUnshelved() });
+	}
+
+	requestBookList() {
+		getBooksUnshelved();
 	}
 
 	componentDidMount() {
 		bookStore.on(STORE_EVENTS.UPDATED, this.updateBookList);
+		bookStore.on(STORE_EVENTS.UPDATE_REQUIRED, this.requestBookList);
 		getBooksUnshelved();
 	}
 
 	componentWillUnmount() {
 		bookStore.removeListener(STORE_EVENTS.UPDATED, this.updateBookList);
+		bookStore.removeListener(STORE_EVENTS.UPDATE_REQUIRED, this.requestBookList);
 	}
 
 	public render() {
 		return (
 			<>
+				<h1 style={{ color: "#434343" }}> Unshelved books </h1>
+				<hr className="divider" />
 				<section className={`${(this.state.books.length > 0) ? "grid-list" : ""}`}>
 					{this.state.books.map((book: any) => (
 						<Book key={uuid()} book={book} />

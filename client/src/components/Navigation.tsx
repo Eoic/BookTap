@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
 import MenuBurger from './MenuBurger';
+import AuthUtils from '../utilities/AuthUtils';
 
 export interface INavigationProps {
     isAuthenticated: boolean
@@ -14,6 +15,11 @@ enum LinkType {
     PrivateOnly,
     PublicOnly,
     Unprotected,
+}
+
+enum UserType {
+    Client,
+    Admin,
 }
 
 const links = [
@@ -69,7 +75,8 @@ const links = [
         linkType: LinkType.PrivateOnly,
         linkStyle: {
             desktop: "nav-link",
-        }
+        },
+        userType: UserType.Admin,
     }
 ];
 
@@ -84,10 +91,20 @@ export default class Navigation extends React.Component<INavigationProps, INavig
         this.setState({ isMenuOpen: !this.state.isMenuOpen });
     }
 
-    isLinkVisible(linkType: LinkType) {
-        return (linkType === LinkType.PrivateOnly && this.props.isAuthenticated) ||
-               (linkType ===  LinkType.PublicOnly && !this.props.isAuthenticated) ||
-               (linkType === LinkType.Unprotected);
+    isLinkVisible(linkType: LinkType, userType: UserType) {
+        let validRole = true;
+
+        if(userType !== undefined) {
+            const currentRole = AuthUtils.getUserType();
+
+            if (currentRole !== null) {
+                validRole = (userType === AuthUtils.getUserType())
+            }
+        }
+
+        return (linkType === LinkType.PrivateOnly && this.props.isAuthenticated && validRole) ||
+            (linkType === LinkType.PublicOnly && !this.props.isAuthenticated) ||
+            (linkType === LinkType.Unprotected);
     }
 
     public render() {
@@ -104,7 +121,7 @@ export default class Navigation extends React.Component<INavigationProps, INavig
                     {links.map((link: any, index) => (
                         <li className={link.position} key={index}>
                             {
-                                this.isLinkVisible(link.linkType) && 
+                                this.isLinkVisible(link.linkType, link.userType) &&
                                 <Link to={`/${link.path}`} className={link.linkStyle.desktop}>
                                     {link.text}
                                 </Link>
@@ -122,9 +139,9 @@ export default class Navigation extends React.Component<INavigationProps, INavig
                     {/* Mobile links */}
                     {links.map((link: any, index) => (
                         <li style={{ display: "block", margin: 0, marginBottom: 5 }} onClick={this.handleClick} key={index}>
-                            <Link to={link.path} className={"nav-mobile-link"}>
+                            {this.isLinkVisible(link.linkType, link.userType) && <Link to={`/${link.path}`} className={"nav-mobile-link"}>
                                 {link.text}
-                            </Link>
+                            </Link>}
                         </li>
                     ))}
                 </ul>}

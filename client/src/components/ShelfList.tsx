@@ -3,6 +3,7 @@ import Modal from './Modal';
 import { shelfStore, STORE_EVENTS } from "../stores/ShelfStore";
 import { getShelves, addShelf } from "../actions/ShelfActions";
 import { SidebarItem } from './Library';
+import ModalMinimal from './ModalMinimal';
 
 export interface IShelfListProps {
     setLinkActive: (path: string) => void,
@@ -13,7 +14,7 @@ export interface IShelfListState {
     shelfTitle: string,
     shelfDescription: string,
     shelfList: [],
-    closeOnAction: boolean,
+    modalOpen: boolean,
 }
 
 export default class ShelfList extends React.Component<IShelfListProps, IShelfListState> {
@@ -24,7 +25,7 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
             shelfTitle: "",
             shelfDescription: "",
             shelfList: shelfStore.getShelves(),
-            closeOnAction: false,
+            modalOpen: false,
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -42,11 +43,15 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
     handleSubmit(event: React.FormEvent) {
         event.preventDefault();
 
-        if (this.state.shelfTitle.length > 0 && this.state.shelfTitle.length < 15) {
+        const length = this.state.shelfTitle.trim().length;
+
+        if (length >= 0 && length <= 30) {
             addShelf({
                 title: this.state.shelfTitle,
                 description: this.state.shelfDescription,
             });
+
+            this.setState({ modalOpen: false, shelfTitle: "", shelfDescription: "" });
         }
     }
 
@@ -72,18 +77,18 @@ export default class ShelfList extends React.Component<IShelfListProps, IShelfLi
     public render() {
         return (
             <>
-                <Modal trigger={{ style: "btn btn-blue add-shelf-btn", icon: "plus", text: "ADD SHELF" }}
+                <ModalMinimal isOpen={this.state.modalOpen} trigger={{ style: "btn btn-blue add-shelf-btn", icon: "plus", text: "ADD SHELF" }}
                     action={<button className="btn btn-green font-medium" type="submit" onClick={this.handleSubmit} form="add-shelf-form"> CREATE </button>}
-                    closeOnAction={false}
-                    onCloseEvent={() => (this.setState({ shelfTitle: "", shelfDescription: "" }))}
-                    title={"ADD NEW SHELF"}>
+                    title={"ADD NEW SHELF"} 
+                    open={() => this.setState({ modalOpen: true })}
+                    close={() => this.setState({ modalOpen: false, shelfTitle: "", shelfDescription: "" })}>
                     <div>
                         <form id="add-shelf-form">
                             <input className="input" required type="text" placeholder="Title" name="shelfTitle" onChange={this.handleChange} value={this.state.shelfTitle} />
                             <textarea className="input" placeholder="Description" name="shelfDescription" onChange={this.handleChange} value={this.state.shelfDescription} />
                         </form>
                     </div>
-                </Modal>
+                </ModalMinimal>
                 <li>
                     <SidebarItem text={"Not in shelves"}
                         icon={"caret-right"}

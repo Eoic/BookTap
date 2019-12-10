@@ -1,6 +1,5 @@
-import crypto from "crypto";
-import { Request, Response } from "express";
-import { getManager } from "typeorm";
+import { Request, Response, response } from "express";
+import { getConnection, getManager } from "typeorm";
 import { User, UserType } from "../models/User";
 import { METHOD_TYPE } from "./helpers/methodTypes";
 import { verifyToken } from "./helpers/routeGuard";
@@ -21,9 +20,21 @@ const users = [
                 return;
             }
 
-            // tslint:disable-next-line: max-line-length
-            const userList = await getManager().find(User, { select: ["id", "username", "email", "userType", "createdAt", "updatedAt"] });
-            res.status(200).json(userList);
+            if (user) {
+
+                // tslint:disable-next-line: max-line-length
+                const userList = await getConnection().getRepository(User)
+                    .createQueryBuilder()
+                    .select(["id", "username", "email", "\"userType\"", "\"createdAt\"", "\"updatedAt\""])
+                    .where("id <> :id", { id: user.id })
+                    .orderBy("username", "ASC")
+                    .execute();
+
+                res.status(200).json(userList);
+                return;
+            }
+
+            res.sendStatus(403);
         },
     },
 
@@ -78,6 +89,33 @@ const users = [
             // TODO: validate and create
 
             res.sendStatus(201);
+        },
+    },
+
+    /**
+     * Create new user
+     */
+    {
+        path: "/users/:id/role",
+        method: METHOD_TYPE.PATCH,
+        auth: verifyToken,
+        handler: async (req: Request, res: Response) => {
+            const user = req.user as any;
+
+            if (user.userType !== UserType.Admin) {
+                res.sendStatus(403);
+                return;
+            }
+
+            const newType = Number(req.body.userType);
+
+            if (newType === 0 || newType === 1) {
+                getManager().update(User, { id: Number(req.params.id) }, { userType: newType }).then(() => {
+                    res.sendStatus(204);
+                });
+            } else {
+                res.sendStatus(400);
+            }
         },
     },
 

@@ -56,7 +56,8 @@ export default class Book extends React.Component<IBookProps, IBookState> {
 						setMenuHoverState={this.setMenuHoverState}
 						hideMenu={this.hideMenu} id={this.props.book.id}
 						filename={this.props.book.originalFilename}
-						shelfId={(this.props.book.shelf) ? this.props.book.shelf.id : -1} />
+						shelfId={(this.props.book.shelf) ? this.props.book.shelf.id : -1}
+						status={this.props.book.status} />
 				</div>
 			</div>
 		);

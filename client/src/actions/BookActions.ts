@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import dispatcher from "../utilities/Dispatcher";
 import AuthUtils from "../utilities/AuthUtils";
 import FileDownload from "js-file-download";
+import { SHELF_ACTIONS } from "./ShelfActions";
+import { response } from "express";
 
 const URL = {
     BOOKS: "/books"
@@ -25,6 +27,9 @@ export const BOOK_ACTIONS = {
     GET_COVER: "BookActions.GetCover",
     ADD_TO_SHELF: "BookActions.AddToShelf",
     GET_BOOKS_UNSHELVED: "BookActions.GetBooksUnshelved",
+    OPEN_STATUS_SELECTOR: "BookActions.OpenStatusSelector",
+    SET_STATUS: "BookActions.SetStatus",
+    GET_SUMMARY: "BookActions.GetSummary",
 }
 
 export const getBooks = () => {
@@ -56,6 +61,9 @@ export const deleteBook = (id: number) => {
 }
 
 export const uploadBook = (files: any) => {
+    let toUpload = files.length;
+    let processed = 0;
+
     files.forEach((file: File) => {
         const formData = new FormData();
         formData.append(file.name, file);
@@ -66,11 +74,16 @@ export const uploadBook = (files: any) => {
                 "Content-Type": "multipart/form-data"
             },
         }).then((response) => {
-            dispatcher.dispatch({
-                type: BOOK_ACTIONS.UPLOAD_BOOK,
-                value: response.status,
-            });
+            processed++;
+
+            if (processed === toUpload) {
+                dispatcher.dispatch({
+                    type: BOOK_ACTIONS.UPLOAD_BOOK,
+                    value: response.status,
+                });
+            }
         }).catch((err) => {
+            processed++;
             dispatcher.dispatch({
                 type: BOOK_ACTIONS.UPLOAD_BOOK,
                 value: err.response.status,
@@ -110,8 +123,6 @@ export const updateBook = (values: any) => {
 }
 
 export const openShelfAdder = (bookId: number, shelfId: number) => {
-    console.log("CALLED SHELF ADDER");
-    
     if (bookId && shelfId) {
         dispatcher.dispatch({
             type: BOOK_ACTIONS.ADD_TO_SHELF,
@@ -122,15 +133,42 @@ export const openShelfAdder = (bookId: number, shelfId: number) => {
 
 export const addToShelf = (bookId: number, shelfId: number) => {
     axios.patch(`${URL.BOOKS}/${bookId}/shelf/${shelfId}`, {}, getConfig()).then((response) => {
-        console.log(response);
+        dispatcher.dispatch({
+            type: BOOK_ACTIONS.ASSIGN_SHELF,
+            value: response.data,
+        });
     });
 }
 
 export const getBooksUnshelved = () => {
     axios.get(`${URL.BOOKS}/unshelved`, getConfig()).then((response) => {
-        console.log(response.data);
         dispatcher.dispatch({
             type: BOOK_ACTIONS.GET_BOOKS_UNSHELVED,
+            value: response.data,
+        })
+    });
+}
+
+export const openStatusSelector = (data: any) => {
+    dispatcher.dispatch({
+        type: BOOK_ACTIONS.OPEN_STATUS_SELECTOR,
+        value: data,
+    });
+}
+
+export const setStatus = (id: number, status: number) => {
+    axios.patch(`${URL.BOOKS}/${id}/status`, { status }, getConfig()).then((response) => {
+        dispatcher.dispatch({
+            type: BOOK_ACTIONS.SET_STATUS,
+            value: response.data,
+        })
+    });
+}
+
+export const getSummary = (callback: any) => {
+    axios.get(`${URL.BOOKS}/summary`, getConfig()).then((response) => {
+        dispatcher.dispatch({
+            type: BOOK_ACTIONS.GET_SUMMARY,
             value: response.data,
         })
     });

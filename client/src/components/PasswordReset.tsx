@@ -11,7 +11,7 @@ export default class PasswordReset extends React.Component<IPasswordResetProps> 
                     <h2> Forgot password </h2>
                     <p className="subtitle"> Password recovery link will be sent to your email address </p>
                     <input className="input" name="email" type="email" placeholder="Email" required></input>
-                    <button type="submit" className="btn btn-purple btn-form"> Recover password </button>
+                    <button style={{ margin: "8px 0" }} type="submit" className="btn btn-purple btn-form"> Recover password </button>
                 </form>
             </div>
         );

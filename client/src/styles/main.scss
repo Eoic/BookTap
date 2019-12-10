@@ -34,6 +34,16 @@
   cursor: pointer;
 }
 
+// ## link
+.btn-link {
+  background-color: transparent;
+  color: #2f2f2f;
+}
+
+.btn-link:hover {
+  background-color: transparent;
+}
+
 // ## Green
 .btn-green {
   background-color: $green;
@@ -125,6 +135,29 @@
 
 .btn-grey:hover {
   background-color: #eeeeee;
+}
+
+// Stepper
+.btn-page {
+  @extend .btn;
+  border: 1px solid #b1b1b1;
+  margin: 0px 2px;
+  transition: all 0.2s;
+}
+
+.btn-page-square {
+  padding: 2px;
+  width: 28px;
+  height: 28px;
+}
+
+.btn-page-active {
+  background-color: #322d75;
+  color: #f1f1f1;
+}
+
+.btn-page:hover {
+  filter: brightness(85%);
 }
 
 a {
@@ -472,10 +505,19 @@ ul.menu-list > li > button {
   }
 }
 
+// Dropdown
+.dropdown {
+  background-color: #f1f1f1;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
 // Footer
 .footer {
   background-color: #2f2f2f;
-  padding: 5px;
+  color: #f1f1f1;
+  padding: 15px;
+  text-align: center;
 }
 
 // Login
@@ -533,6 +575,11 @@ ul.menu-list > li > button {
   border-radius: 2px;
   color: #353535;
   font-family: "Open Sans", sans-serif;
+}
+
+.input-aligned {
+  padding: 6px;
+  font-size: 14px;
 }
 
 .btn-form {
@@ -641,12 +688,17 @@ ul.menu-list > li > button {
   background-color: #eeeeee;
   border-radius: 4px;
   top: 50%;
-  left: calc(50% - 200px);
   padding-bottom: 15px;
 }
 
 .modal-small {
   width: 420px;
+  left: calc(50% - 210px);
+}
+
+.modal-medium {
+  width: 520px;
+  left: calc(50% - 260px);
 }
 
 .modal-header {
@@ -690,12 +742,51 @@ ul.menu-list > li > button {
   margin-right: 20px;
 }
 
+.ml-20 {
+  margin-left: 20px;
+}
+
 .ml-10 {
   margin-left: 10px;
 }
 
 .my-15 {
   margin: 15px 0px;
+}
+
+// Summary
+.summary-header {
+  @extend .border-bottom;
+  margin-left: -10px;
+  padding-left: 15px;
+  margin-right: -10px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+
+.summary {
+  background-color: #fcfcfc;
+  border: 1px solid #b3b3b3;
+  border-top: 3px solid $green;
+  padding: 10px;
+  display: inline-block;
+  min-width: 400px;
+  margin-right: 20px;
+
+  h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+
+  .bold-value {
+    font-weight: bold;
+    font-size: 18px;
+    color: #353535;
+  }
 }
 
 // Books list
@@ -738,7 +829,7 @@ ul.menu-list > li > button {
 .sub-menu {
   background-color: #fcfafa;
   position: relative;
-  top: -199px;
+  top: -221px;
   left: 155px;
   width: 115px;
   box-shadow: 0px 0px 3px 1px #616161;
@@ -975,7 +1066,7 @@ input[type="file"] {
 
 // Users
 .table-section {
-  padding: $navbar-height + 2rem;
+  // padding: $navbar-height + 2rem;
   width: 80%;
   margin: 0 auto;
 }
@@ -985,6 +1076,7 @@ input[type="file"] {
   padding: 0px 10px;
   font-size: 14px;
   color: rgb(255, 255, 255);
+  font-weight: bold;
 }
 
 .badge-green {
@@ -994,7 +1086,7 @@ input[type="file"] {
 
 .badge-blue {
   @extend .badge;
-  background-color: #1422a3;
+  background-color: #3444d4;
 }
 
 .profile {
@@ -1047,6 +1139,28 @@ input[type="file"] {
     font-size: 18px;
     color: #2f2f2f;
     padding-right: 20px;
+  }
+}
+
+.form-input-inline {
+  display: block;
+
+  & > input {
+    @extend .input;
+    display: inline-block;
+    padding: 5px;
+    font-size: 15px;
+    width: 100%;
+  }
+
+  & > label {
+    text-align: left;
+    width: 190px;
+    display: inline-block;
+    font-size: 18px;
+    color: #2f2f2f;
+    padding-right: 20px;
+    margin-bottom: 3px;
   }
 }
 

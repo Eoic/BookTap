@@ -93,7 +93,7 @@ export default class ShelfAdder extends React.Component<IShelfAdderProps, IShelf
                             <div className="modal-body">
                                 <hr style={{ marginTop: -5 }} />
                                 <label style={{ display: "block", marginBottom: 3 }} className="subtitle font-small"> Choose shelf from the list </label>
-                                <select value={this.state.shelfId} className="select" name="shelfId" onChange={this.handleChange}>
+                                <select value={this.state.shelfId} className="select dropdown" name="shelfId" onChange={this.handleChange}>
                                     <option value="-1"> Unshelved </option>
                                     {this.state.shelves.map((shelf: any, index) => (
                                         <option value={shelf.id} key={index}> {shelf.title} </option>

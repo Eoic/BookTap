@@ -3,7 +3,6 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { Router } from "express";
-import expressJwt from "express-jwt";
 
 const handleCookieParser = (router: Router) => {
   router.use(cookieParser());

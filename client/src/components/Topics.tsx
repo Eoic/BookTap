@@ -7,6 +7,7 @@ import { shelfStore, STORE_EVENTS as SHELF_STORE_EVENTS } from "../stores/ShelfS
 import Topic from './Topic';
 import uuid from 'uuid';
 import ListSelector from './ListSelector';
+import Stepper from './Stepper';
 
 export interface ITopicsProps {
 }
@@ -201,6 +202,8 @@ export default class Topics extends React.Component<ITopicsProps, ITopicsState> 
 							</tr>}
 						</tbody>
 					</table>
+					<hr className="divider" />
+					<Stepper size={10} />
 				</section>
 			</section>
 		);

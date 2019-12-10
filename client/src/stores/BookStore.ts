@@ -9,18 +9,30 @@ export const STORE_EVENTS = {
     UPLOAD_SUCCESSFUL: "StoreEvents.UploadSuccessful",
     UPLOAD_FAILED: "StoreEvents.UploadFailed",
     ADD_SHELF_READY: "StoreEvents.AddShelfReady",
+    STATUS_SELECTOR_READY: "StoreEvents.StatusSelectorReady",
+    SUMMARY_READY: "StoreEvents.SummaryReady",
 }
 
 class BookStore extends EventEmitter {
     books: [];
     unshelved: [];
     bookById: {};
+    statusSelectorData: any;
+    summary: { uploaded: number, inProgress: number, done: number, shelves: number, topics: number }
 
     constructor() {
         super();
         this.books = [];
         this.unshelved = [];
         this.bookById = {};
+        this.statusSelectorData = {};
+        this.summary = {
+            uploaded: 0,
+            inProgress: 0,
+            done: 0,
+            shelves: 0,
+            topics: 0,
+        }
     }
 
     handleActions(action: unknown) {
@@ -60,6 +72,29 @@ class BookStore extends EventEmitter {
             case BookActions.BOOK_ACTIONS.GET_BOOKS_UNSHELVED: {
                 this.unshelved = typedAction.value;
                 this.emit(STORE_EVENTS.UPDATED);
+                break;
+            }
+            
+            case BookActions.BOOK_ACTIONS.ASSIGN_SHELF: {
+                this.emit(STORE_EVENTS.UPDATE_REQUIRED);
+                break;
+            }
+
+            case BookActions.BOOK_ACTIONS.OPEN_STATUS_SELECTOR: {
+                this.statusSelectorData = typedAction.value;
+                this.emit(STORE_EVENTS.STATUS_SELECTOR_READY);
+                break;
+            }
+
+            case BookActions.BOOK_ACTIONS.SET_STATUS: {
+                this.emit(STORE_EVENTS.UPDATE_REQUIRED);
+                break;
+            }
+
+            case BookActions.BOOK_ACTIONS.GET_SUMMARY: {
+                this.summary = typedAction.value;
+                this.emit(STORE_EVENTS.SUMMARY_READY);
+                break;
             }
         }
     }
@@ -74,6 +109,14 @@ class BookStore extends EventEmitter {
 
     getBookById() {
         return this.bookById;
+    }
+
+    getStatusSelectorData() {
+        return this.statusSelectorData;
+    }
+
+    getSummary() {
+        return this.summary;
     }
 }
 

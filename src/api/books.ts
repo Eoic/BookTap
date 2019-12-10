@@ -10,6 +10,7 @@ import pdfImage from "pdf-image";
 import { getManager } from "typeorm";
 import { Book, BookStatus } from "../models/Book";
 import { Shelf } from "../models/Shelf";
+import { Topic } from "../models/Topic";
 import { User } from "../models/User";
 import { METHOD_TYPE } from "./helpers/methodTypes";
 import { verifyToken } from "./helpers/routeGuard";
@@ -34,7 +35,7 @@ const storage = multer.diskStorage({
     callback(null, userDestination);
   },
   filename: (req, file, callback) => {
-    const hash = crypto.createHash("md5").update(file.originalname).digest("hex");
+    const hash = crypto.createHash("md5").update(file.originalname + new Date().toISOString()).digest("hex");
     const extension = path.extname(file.originalname);
     callback(null, `${hash}${extension}`);
   },
@@ -57,6 +58,9 @@ const books = [
       const bookList = await getManager().find(Book, {
         where: { user },
         relations: ["shelf"],
+        order: {
+          title: "ASC",
+        },
       });
 
       if (user) {
@@ -75,6 +79,31 @@ const books = [
       }
 
       res.status(200).json(bookList);
+    },
+  },
+
+  {
+    path: "/books/summary",
+    method: METHOD_TYPE.GET,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const user = await getManager().findOne(User, (req.user as any).id);
+
+      if (user) {
+        const bookStatusList = await getManager().find(Book, {
+          where: { user },
+          select: ["status"],
+        });
+
+        const inProgress = bookStatusList.filter((book) => Number(book.status) === 1).length;
+        const done = bookStatusList.filter((book) => Number(book.status) === 2).length;
+        const shelves = await getManager().count(Shelf, { where: { user } });
+        const topics = await getManager().count(Topic, { where: { user } });
+        res.json({ uploaded: bookStatusList.length, inProgress, done, shelves, topics });
+        return;
+      } else {
+        res.sendStatus(403);
+      }
     },
   },
 
@@ -196,6 +225,7 @@ const books = [
       }
     },
   },
+
   /**
    * Upload new book(s) [CRUD(create)][DONE]
    */
@@ -501,7 +531,6 @@ const books = [
     method: METHOD_TYPE.PATCH,
     auth: verifyToken,
     handler: async (req: Request, res: Response) => {
-      console.log("RECEIVED");
       const entityManager = getManager();
       const bookId = Number(req.params.bookId);
       const shelfId = Number(req.params.shelfId);
@@ -510,6 +539,12 @@ const books = [
       const book = await entityManager.findOne(Book, { where: { user, id: bookId } });
 
       if (book) {
+        if (shelfId === -1) {
+          await entityManager.update(Book, { user, id: bookId }, { shelf: null });
+          res.sendStatus(204);
+          return;
+        }
+
         const shelf = await entityManager.findOne(Shelf, { where: { id: shelfId } });
 
         if (shelf) {

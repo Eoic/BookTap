@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import AuthUtils from "../utilities/AuthUtils"
+import { UserType } from '../utilities/UserType';
 
-export default function WithAuth(ProtectedComponent: any) {
+export default function WithAuth(ProtectedComponent: any, requiredRole?: UserType) {
     return class AuthWrapper extends Component {
         state = {
             decoded: null,
@@ -13,7 +14,14 @@ export default function WithAuth(ProtectedComponent: any) {
                 (this.props as any).history.replace("/login");
             } else {
                 try {
-                    const decoded = AuthUtils.getDecoded();
+                    const decoded: any = AuthUtils.getDecoded();
+
+                    if (requiredRole !== undefined) {
+                        if (requiredRole !== decoded.userType) {
+                            (this.props as any).history.replace("/");
+                        }
+                    }
+
                     this.setState({
                         loaded: true,
                         decoded,
@@ -29,7 +37,7 @@ export default function WithAuth(ProtectedComponent: any) {
             if (this.state.loaded === true) {
                 if (this.state.decoded) {
                     return (
-                        <ProtectedComponent 
+                        <ProtectedComponent
                             history={(this.props as any).history}
                             decoded={this.state.decoded} />
                     )

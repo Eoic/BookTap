@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from "react-router-dom";
 import { shelfStore, STORE_EVENTS as SHELF_STORE_EVENTS } from "../stores/ShelfStore";
-import { getShelfById, deleteShelf } from "../actions/ShelfActions";
+import { getShelfById, deleteShelf, editShelf } from "../actions/ShelfActions";
 import Book from './Book';
 import uuid from 'uuid';
 import Stepper from './Stepper';
@@ -18,28 +18,31 @@ export interface IShelfState {
 	title: string,
 	description: string,
 	books: [],
+	topicPrefix: string,
 }
 
 export default class Shelf extends React.Component<IShelfProps, IShelfState> {
 	constructor(props: IShelfProps) {
 		const { title, description } = shelfStore.getShelfById();
 		super(props);
-		
+
 		this.state = {
 			id: (this.props.match.params as any).id,
 			title,
 			description,
 			books: [],
+			topicPrefix: "",
 		}
 
 		this.handleUpdate = this.handleUpdate.bind(this);
 		this.updateBookList = this.updateBookList.bind(this);
 		this.requestBookList = this.requestBookList.bind(this);
+		this.handleEditorSubmit = this.handleEditorSubmit.bind(this);
 	}
 
 	handleUpdate() {
-		const { title, description, books } = shelfStore.getShelfById();
-		this.setState({ title, description, books });
+		const { title, description, books, topic } = shelfStore.getShelfById();
+		this.setState({ title, description, books, topicPrefix: (topic) ? topic.title : "" });
 	}
 
 	componentDidMount() {
@@ -74,16 +77,27 @@ export default class Shelf extends React.Component<IShelfProps, IShelfState> {
 		return null;
 	}
 
+	handleEditorSubmit(text: string, key: string) {
+		const { id, title, description } = this.state;
+		let data: any = { title, description };
+		data[key] = text;
+		editShelf(id, data, (newData: any) => {
+			console.log(newData);
+			this.setState({
+				title: newData.title,
+				description: newData.description,
+			});
+		});
+	}
+
 	public render() {
+		const topicPrefix = this.state.topicPrefix;
+
 		return (
 			<section>
 				<button className="btn btn-green font-medium">
 					<i className="fas fa-plus icon-fixed-width" />
 					ADD BOOKS
-				</button>
-				&nbsp;
-				<button className="btn btn-blue font-medium">
-					<i className="fas fa-broom icon-fixed-width" />
 				</button>
 				&nbsp;
 				<button className="btn btn-red font-medium"
@@ -97,8 +111,8 @@ export default class Shelf extends React.Component<IShelfProps, IShelfState> {
 				</button>
 				<hr className="divider" />
 
-				<EditableField text={this.state.title} tag="h3" name="title" />
-				<EditableField text={this.state.description || "No description"} tag="p" name="description" />
+				<EditableField prefix={(topicPrefix.length > 0) ? topicPrefix : undefined } fieldLength={{ min: 1, max: 30 }} text={this.state.title} tag="h3" name="title" handleSubmit={this.handleEditorSubmit} />
+				<EditableField fieldLength={{ min: 0, max: 255 }} text={this.state.description || "No description"} tag="p" name="description" handleSubmit={this.handleEditorSubmit} />
 
 				<hr className="divider" />
 				<section className={`${(this.state.books.length > 0) ? "grid-list" : ""}`}>
@@ -110,7 +124,7 @@ export default class Shelf extends React.Component<IShelfProps, IShelfState> {
 						<h4 className="color-gray"> This shelf has no books yet... </h4>
 					</div>}
 				</section>
-				<hr />
+				<hr className="divider" />
 				<Stepper size={50} />
 			</section>
 		);

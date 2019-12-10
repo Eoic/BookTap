@@ -56,8 +56,18 @@ export default class AuthUtils {
         localStorage.setItem(AuthUtils.tokenKey, token);
     }
 
-    static getToken = () : string | null => {
+    static getToken = (): string | null => {
         return localStorage.getItem(AuthUtils.tokenKey);
+    }
+
+    static getUserType = (): number | null => {
+        const userData: any = AuthUtils.getDecoded();
+
+        if (userData) {
+            return userData.userType
+        }
+
+        return null;
     }
 
     static logout = () => {
@@ -79,9 +89,9 @@ export default class AuthUtils {
             headers,
             ...options
         }).then(AuthUtils.checkStatus)
-        .then((response) => response.json());
+            .then((response) => response.json());
     }
-    
+
     static checkStatus = (response: Response) => {
         if (response.status >= 200 || response.status < 300) {
             return response;

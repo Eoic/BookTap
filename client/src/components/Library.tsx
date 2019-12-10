@@ -4,10 +4,8 @@ import WithAuth from '../hoc/WithAuth';
 import BookList from './BookList';
 import { Link, Route, RouteComponentProps } from 'react-router-dom';
 import Topics from './Topics';
-import Shelves from './Shelves';
 import ReadingSummary from './ReadingSummary';
-import ReadingInProgress from './ReadingInProgress';
-import ReadingFinished from './ReadingFinished';
+import FilteredBookList from './FilteredBookList';
 import SidebarSection from './SidebarSection';
 import ShelfList from './ShelfList';
 import Topic from './Topic';
@@ -161,8 +159,8 @@ class Library extends React.Component<ILibraryProps, ILibraryState> {
 					<Route path="/library/shelf/:id" render={(props) => <Shelf {...props} />} />
 					<Route path="/library/unshelved" render={(props) => <Unshelved {...props} />} />
 					<Route path="/library/reading-summary" component={ReadingSummary} />
-					<Route path="/library/reading-in-progress" component={ReadingInProgress} />
-					<Route path="/library/reading-finished" component={ReadingFinished} />
+					<Route path="/library/reading-in-progress" render={(props) => <FilteredBookList {...props} title={"Books in progress"} readingStatusFilter={1} emptyListMessage={"No books were started reading..."} />} />
+					<Route path="/library/reading-finished"  render={(props) => <FilteredBookList {...props} title={"Finished books"} readingStatusFilter={2} emptyListMessage={"No books were finished reading..."} />} />
 				</section>
 			</>
 		);

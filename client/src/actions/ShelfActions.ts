@@ -1,6 +1,7 @@
 import axios from "axios";
 import dispatcher from "../utilities/Dispatcher";
 import AuthUtils from "../utilities/AuthUtils";
+import { response } from "express";
 
 const URL = {
     SHELVES: "/shelves"
@@ -52,5 +53,18 @@ export function deleteShelf(id: number) {
             type: SHELF_ACTIONS.DELETE_SHELF,
             value: response.data,
         });
+    });
+}
+
+export function editShelf(id: number, data: any, callback: any) {
+    axios.patch(`${URL.SHELVES}/${id}`, data, getConfig()).then((response) => {
+        getShelfDetails(id, callback);
+    });
+}
+
+export function getShelfDetails(id: number, callback: any) {
+    axios.get(`${URL.SHELVES}/${id}/details`, getConfig()).then((response) => {
+        callback(response.data);
+        getShelves();
     });
 }

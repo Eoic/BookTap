@@ -1,5 +1,6 @@
 import * as React from 'react';
 import AuthUtils from '../utilities/AuthUtils';
+import WithAuth from '../hoc/WithAuth';
 
 export interface IProfileProps {
 }
@@ -11,7 +12,7 @@ export interface IProfileState {
     newPasswordRepeat: "",
 }
 
-export default class Profile extends React.Component<IProfileProps, IProfileState> {
+class Profile extends React.Component<IProfileProps, IProfileState> {
     constructor(props: IProfileProps) {
         const profileData = AuthUtils.getDecoded();
         super(props);
@@ -34,6 +35,8 @@ export default class Profile extends React.Component<IProfileProps, IProfileStat
     public render() {
         return (
             <section className="profile">
+                <h1> Profile settings </h1>
+                <hr className="divider" />
                 <h3> Edit profile </h3>
                 <form className="form" id="profile-update">
                     <div className="form-input">
@@ -70,3 +73,5 @@ export default class Profile extends React.Component<IProfileProps, IProfileStat
         );
     }
 }
+
+export default WithAuth(Profile);

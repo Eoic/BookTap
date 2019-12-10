@@ -25,6 +25,9 @@ const shelves = [
         entityManager.find(Shelf, {
           where: { user: result },
           relations: ["topic"],
+          order: {
+            title: "ASC",
+          },
         }).then((shelvesList) => {
           res.status(200).json({ shelves: shelvesList });
         });
@@ -50,7 +53,7 @@ const shelves = [
       const user = await getManager().findOne(User, (req.user as any).id);
       const shelfBooks = await getManager().findOne(Shelf, {
         where: { id: shelfId, user },
-        relations: ["books"],
+        relations: ["books", "topic"],
       });
 
       if (shelfBooks && user) {
@@ -65,6 +68,7 @@ const shelves = [
           const img = fs.readFileSync(filePath);
           const imgEncoded = Buffer.from(img).toString("base64");
           book.cover = imgEncoded;
+          book.shelf = { id: shelfId };
         });
 
         res.status(200).json({ shelf: shelfBooks });
@@ -83,7 +87,8 @@ const shelves = [
     auth: verifyToken,
     validator: [
       check("title").not().isEmpty().withMessage("Shelf title should not be empty.")
-        .isAlphanumeric().withMessage("Title should consist of alphanumeric characters only.")
+        .matches(/^[a-z0-9 ]+$/i)
+        // .isAlphanumeric().withMessage("Title should consist of alphanumeric characters only.")
         .isLength({ max: shelfLimits.title.max })
         .withMessage(`Title is too long. Max length is: ${shelfLimits.title.max}`),
     ],
@@ -122,6 +127,87 @@ const shelves = [
         });
         return;
       });
+    },
+  },
+
+  /**
+   * Get shelf details
+   */
+  {
+    path: "/shelves/:id/details",
+    method: METHOD_TYPE.GET,
+    auth: verifyToken,
+    handler: async (req: Request, res: Response) => {
+      const user = await getManager().findOne(User, (req.user as any).id);
+      const shelf = await getManager().findOne(Shelf, {
+        where: {
+          id: Number(req.params.id),
+          user,
+        },
+        select: ["title", "description"],
+      });
+
+      if (shelf) {
+        res.json(shelf);
+      } else { res.sendStatus(404); }
+    },
+  },
+
+  /**
+   * Update shelf [CRUD(modify)][DONE]
+   */
+  {
+    path: "/shelves/:id",
+    method: METHOD_TYPE.PATCH,
+    auth: verifyToken,
+    validator: [
+      check("title").not().isEmpty().withMessage("Shelf title should not be empty.")
+        .isAlphanumeric().withMessage("Title should consist of alphanumeric characters only.")
+        .isLength({ max: shelfLimits.title.max })
+        .withMessage(`Title is too long. Max length is: ${shelfLimits.title.max}`),
+    ],
+    handler: async (req: Request, res: Response) => {
+      // Check for validation errors
+      const results = validationResult(req);
+
+      if (!results.isEmpty()) {
+        const errors = validationResultParser(results);
+        res.status(400).json({ errors });
+        return;
+      }
+
+      // Check if title is unique
+      const { title, description } = req.body;
+      const user = await getManager().findOne(User, (req.user as any).id);
+      const shelf = await getManager().findOne(Shelf, { title, user });
+
+      if (shelf) {
+        if (shelf.id !== Number(req.params.id)) {
+          res.status(409).json({ errors: ["Shelf with this name already exists"] });
+          return;
+        }
+      }
+
+      const shelfToUpdate = await getManager().findOne(Shelf, {
+        where: {
+          id: req.params.id,
+          user,
+        },
+      });
+
+      // Update shelf instance
+      if (shelfToUpdate) {
+        shelfToUpdate.title = title;
+        shelfToUpdate.description = description;
+
+        shelfToUpdate.save().then(() => {
+          res.status(204).json({ message: "Shelf was updated successfully" });
+          return;
+        });
+
+      } else {
+        res.sendStatus(404);
+      }
     },
   },
 

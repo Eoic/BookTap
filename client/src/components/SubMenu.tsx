@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { deleteBook, readBook, downloadBook, openShelfAdder } from "../actions/BookActions";
+import { deleteBook, readBook, downloadBook, openShelfAdder, openStatusSelector } from "../actions/BookActions";
 import { Link } from 'react-router-dom';
 import { openConfirmation } from '../actions/AppActions';
 
@@ -9,6 +9,7 @@ export interface ISubMenuProps {
     isOpen: boolean,
     title: string,
     filename: string,
+    status: number,
     hideMenu: () => void,
     setMenuHoverState: (isMenuHovered: boolean) => void,
 }
@@ -42,6 +43,7 @@ export default class SubMenu extends React.Component<ISubMenuProps> {
                 </Link>
                 <button onClick={() => { downloadBook(this.props.id, this.props.filename); this.props.hideMenu() }}> Download </button>
                 <button onClick={() => { this.assignShelf() }}> Add to shelf </button>
+                <button onClick={() => { openStatusSelector({ id: this.props.id, title: this.props.title, status: this.props.status }); this.props.hideMenu() }}> Set status </button>
             </div>
         );
     }

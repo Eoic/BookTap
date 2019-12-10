@@ -54,5 +54,5 @@ export class Book extends BaseEntity {
     public user!: User;
 
     @ManyToOne(() => Shelf, (shelf) => (shelf as any).books, { onDelete: "SET NULL" })
-    public shelf!: Shelf;
+    public shelf!: Shelf | null;
 }
