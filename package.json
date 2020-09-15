@@ -25,7 +25,7 @@
     "dotenv": "^8.1.0",
     "epub-metadata-parser": "^1.1.14",
     "express": "^4.17.1",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "express-session": "^1.16.2",
     "express-validator": "^6.2.0",
     "gm": "^1.23.1",
